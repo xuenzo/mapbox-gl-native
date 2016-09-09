@@ -72,7 +72,7 @@ MGL_EXPORT
  is specified explicitly.
 
  @param version The style’s latest released version. As of publication, the
-    current version is `9`.
+    current version is `10`.
  */
 + (NSURL *)streetsStyleURLWithVersion:(NSInteger)version;
 
@@ -91,7 +91,7 @@ MGL_EXPORT
  Outdoors is a general-purpose style tailored to outdoor activities.
 
  @param version The style’s latest released version. As of publication, the
-    current version is `9`.
+    current version is `10`.
  */
 + (NSURL *)outdoorsStyleURLWithVersion:(NSInteger)version;
 
@@ -110,7 +110,7 @@ MGL_EXPORT
  Light is a subtle, light-colored backdrop for data visualizations.
 
  @param version The style’s latest released version. As of publication, the
-    current version is `9`.
+    current version is `10`.
  */
 + (NSURL *)lightStyleURLWithVersion:(NSInteger)version;
 
@@ -129,7 +129,7 @@ MGL_EXPORT
  Dark is a subtle, dark-colored backdrop for data visualizations.
 
  @param version The style’s latest released version. As of publication, the
-    current version is `9`.
+    current version is `10`.
  */
 + (NSURL *)darkStyleURLWithVersion:(NSInteger)version;
 
@@ -148,7 +148,7 @@ MGL_EXPORT
  Satellite is high-resolution satellite and aerial imagery.
 
  @param version The style’s latest released version. As of publication, the
-    current version is `9`.
+    current version is `10`.
  */
 + (NSURL *)satelliteStyleURLWithVersion:(NSInteger)version;
 
@@ -173,7 +173,7 @@ MGL_EXPORT
  Streets.
 
  @param version The style’s latest released version. As of publication, the
-    current version is `9`.
+    current version is `10`.
  */
 + (NSURL *)satelliteStreetsStyleURLWithVersion:(NSInteger)version;
 
