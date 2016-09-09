@@ -14,6 +14,7 @@ Mapbox welcomes participation and contributions from everyone. Please read [CONT
 ### Styles
 
 * Added support for data-driven styling in the form of source and composite style functions. `MGLStyleFunction` is now an abstract class, with `MGLCameraStyleFunction` providing the behavior of `MGLStyleFunction` in previous releases. New `MGLStyleFunction` subclasses allow you to vary a style attribute by the values of attributes of features in the source. ([#7596](https://github.com/mapbox/mapbox-gl-native/pull/7596))
+* MGLMapView and MGLTilePyramidOfflineRegion now default to version 10 of the Mapbox Streets style. Similarly, each of the style URL class methods of MGLStyle returns a URL to version 10 of the respective style. ([#6301](https://github.com/mapbox/mapbox-gl-native/pull/6301))
 * Added `circleStrokeColor`, `circleStrokeWidth`, and `circleStrokeOpacity` properties to MGLCircleStyleLayer and support for corresponding properties in style JSON files. ([#7356](https://github.com/mapbox/mapbox-gl-native/pull/7356))
 * Point-placed labels in symbol style layers are now placed at more optimal locations within polygons. ([#7465](https://github.com/mapbox/mapbox-gl-native/pull/7465))
 * Fixed flickering that occurred when manipulating a style layer. ([#7616](https://github.com/mapbox/mapbox-gl-native/pull/7616))
