@@ -277,7 +277,7 @@ darwin-update-examples:
 
 .PHONY: check-public-symbols
 check-public-symbols:
-	node platform/darwin/scripts/check-public-symbols.js macOS
+	node platform/darwin/scripts/check-public-symbols.js macOS iOS
 endif
 
 #### Linux targets #####################################################

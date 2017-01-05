@@ -2656,6 +2656,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"$(sqlite_cflags)",
@@ -2690,6 +2691,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"$(sqlite_cflags)",
@@ -2737,6 +2739,7 @@
 			buildSettings = {
 				BITCODE_GENERATION_MODE = bitcode;
 				HEADER_SEARCH_PATHS = "$(mbgl_core_INCLUDE_DIRECTORIES)";
+				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"$(sqlite_cflags)",
@@ -2763,6 +2766,7 @@
 			buildSettings = {
 				BITCODE_GENERATION_MODE = bitcode;
 				HEADER_SEARCH_PATHS = "$(mbgl_core_INCLUDE_DIRECTORIES)";
+				OTHER_CFLAGS = "-fvisibility=hidden";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"$(sqlite_cflags)",
