@@ -110,6 +110,12 @@ public class MapView extends FrameLayout {
     initialise(context, options);
   }
 
+  /**
+   * Initialises the MapView with the hosting context and default configuration.
+   *
+   * @param context the Context used to host this map
+   * @param options the default configuration to start this map with
+   */
   private void initialise(@NonNull final Context context, @NonNull final MapboxMapOptions options) {
     if (isInEditMode()) {
       // in IDE, show preview map
@@ -174,6 +180,15 @@ public class MapView extends FrameLayout {
     mapboxMap.initialise(context, options);
   }
 
+  /**
+   * Initialises the drawing surface.
+   * <p>
+   * Currently allows to create the MapView with a TextureView or a SurfaceView.
+   * </p>
+   *
+   * @param context the context that is hosting this map
+   * @param options the default configuration containing a flag to use
+   */
   private void initalizeDrawingSurface(Context context, MapboxMapOptions options) {
     if (options.getTextureMode()) {
       TextureView textureView = new TextureView(context);
@@ -191,15 +206,21 @@ public class MapView extends FrameLayout {
   //
 
   /**
+   * Called when the component hosting this map is created.
    * <p>
    * You must call this method from the parent's {@link android.app.Activity#onCreate(Bundle)} or
    * {@link android.app.Fragment#onCreate(Bundle)}.
    * </p>
+   * <p>
    * You must set a valid access token with {@link Mapbox#getInstance(Context, String)}) before you call this method
    * or an exception will be thrown.
+   * </p>
    *
-   * @param savedInstanceState Pass in the parent's savedInstanceState.
+   * @param savedInstanceState Pass in the parent's savedInstanceState
    * @see Mapbox#getInstance(Context, String)
+   * @see Activity#onCreate(Bundle)
+   * @see Fragment#onCreate(Bundle)
+   * @see SupportMapFragment#onCreate(Bundle)
    */
   @UiThread
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -219,12 +240,17 @@ public class MapView extends FrameLayout {
   }
 
   /**
+   * Called when the component hosting this map is saving his instance state.
+   * <p>
    * You must call this method from the parent's {@link android.app.Activity#onSaveInstanceState(Bundle)}
    * or {@link android.app.Fragment#onSaveInstanceState(Bundle)}.
+   * </p>
    *
-   * @param outState Pass in the parent's outState.
+   * @param outState Pass in the parent's outState
+   * @see Activity#onSaveInstanceState(Bundle)
+   * @see Fragment#onSaveInstanceState(Bundle)
+   * @see SupportMapFragment#onSaveInstanceState(Bundle)
    */
-
   @UiThread
   public void onSaveInstanceState(@NonNull Bundle outState) {
     outState.putBoolean(MapboxConstants.STATE_HAS_SAVED_STATE, true);
@@ -232,7 +258,15 @@ public class MapView extends FrameLayout {
   }
 
   /**
+   * Called whent the component hosting this map has started.
+   * <p>
    * You must call this method from the parent's {@link Activity#onStart()} or {@link Fragment#onStart()}
+   * </p>
+   *
+   * @see MapboxMap#onStart()
+   * @see Activity#onStart()
+   * @see Fragment#onStart()
+   * @see SupportMapFragment#onStart()
    */
   @UiThread
   public void onStart() {
@@ -242,7 +276,14 @@ public class MapView extends FrameLayout {
   }
 
   /**
+   * Called when the component hosting this map has resumed.
+   * <p>
    * You must call this method from the parent's {@link Activity#onResume()} or {@link Fragment#onResume()}.
+   * </p>
+   *
+   * @see Activity#onResume()
+   * @see Fragment#onResume()
+   * @see SupportMapFragment#onResume()
    */
   @UiThread
   public void onResume() {
@@ -254,7 +295,14 @@ public class MapView extends FrameLayout {
   }
 
   /**
+   * Called when the component hosting this map is pausing.
+   * <p>
    * You must call this method from the parent's {@link Activity#onPause()} or {@link Fragment#onPause()}.
+   * </p>
+   *
+   * @see Activity#onPause()
+   * @see Fragment#onPause()
+   * @see SupportMapFragment#onPause()
    */
   @UiThread
   public void onPause() {
@@ -262,7 +310,14 @@ public class MapView extends FrameLayout {
   }
 
   /**
+   * Called when the component hosting this map is stopping.
+   * <p>
    * You must call this method from the parent's {@link Activity#onStop()} or {@link Fragment#onStop()}.
+   * </p>
+   *
+   * @see Activity#onStop()
+   * @see Fragment#onStop()
+   * @see SupportMapFragment#onStop()
    */
   @UiThread
   public void onStop() {
@@ -272,7 +327,14 @@ public class MapView extends FrameLayout {
   }
 
   /**
+   * Called when the component hosting this map is destroying.
+   * <p>
    * You must call this method from the parent's {@link Activity#onDestroy()} or {@link Fragment#onDestroy()}.
+   * </p>
+   *
+   * @see Activity#onDestroy()
+   * @see Fragment#onDestroy()
+   * @see SupportMapFragment#onDestroy()
    */
   @UiThread
   public void onDestroy() {
@@ -302,6 +364,15 @@ public class MapView extends FrameLayout {
     }
   }
 
+  /**
+   * Handles the user touch interaction.
+   *
+   * @param event the current active motion event
+   * @return true if touch event is handled, false if not
+   * @see View#onTouchEvent(MotionEvent)
+   * @see MapZoomButtonController#onTouch(View, MotionEvent)
+   * @see MapGestureDetector#onTouchEvent(MotionEvent)
+   */
   @Override
   public boolean onTouchEvent(MotionEvent event) {
     if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -310,31 +381,70 @@ public class MapView extends FrameLayout {
     return mapGestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
   }
 
+  /**
+   * Handles the user key down interaction.
+   *
+   * @param keyCode the code for the key that was pressed
+   * @param event   the current active key event
+   * @return true if key event is handled, false if not
+   */
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     return mapKeyListener.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
   }
 
+  /**
+   * Handles the user key long press interaction.
+   *
+   * @param keyCode the code for the key that was long pressed
+   * @param event   the current active key event
+   * @return true if key event is handled, false if not
+   */
   @Override
   public boolean onKeyLongPress(int keyCode, KeyEvent event) {
     return mapKeyListener.onKeyLongPress(keyCode, event) || super.onKeyLongPress(keyCode, event);
   }
 
+  /**
+   * Handles the user key up interaction.
+   *
+   * @param keyCode the code for the key that was released
+   * @param event   the current active key event
+   * @return true is key event is handled, false if not
+   */
   @Override
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     return mapKeyListener.onKeyUp(keyCode, event) || super.onKeyUp(keyCode, event);
   }
 
+  /**
+   * Handles the user trackball interaction.
+   *
+   * @param event the current active motion event
+   * @return true if motion event is handled, false if not
+   */
   @Override
   public boolean onTrackballEvent(MotionEvent event) {
     return mapKeyListener.onTrackballEvent(event) || super.onTrackballEvent(event);
   }
 
+  /**
+   * Handles the user interaction that don't fit any other handlers.
+   *
+   * @param event the current active motion event
+   * @return true if motion event is handled, false if not
+   */
   @Override
   public boolean onGenericMotionEvent(MotionEvent event) {
     return mapGestureDetector.onGenericMotionEvent(event) || super.onGenericMotionEvent(event);
   }
 
+  /**
+   * Handles the user hover touch interaction
+   *
+   * @param event the current active motion event
+   * @return true if motion event is handled, false if not
+   */
   @Override
   public boolean onHoverEvent(MotionEvent event) {
     switch (event.getActionMasked()) {
@@ -354,7 +464,10 @@ public class MapView extends FrameLayout {
   }
 
   /**
+   * Called when the hosting component is running low on memory.
+   * <p>
    * You must call this method from the parent's {@link Activity#onLowMemory()} or {@link Fragment#onLowMemory()}.
+   * </p>
    */
   @UiThread
   public void onLowMemory() {
@@ -943,6 +1056,9 @@ public class MapView extends FrameLayout {
     void onMapChanged(@MapChange int change);
   }
 
+  /**
+   * Change the focal point and notify registered listeners.
+   */
   private class FocalPointInvalidator implements FocalPointChangeListener {
 
     private final FocalPointChangeListener[] focalPointChangeListeners;
@@ -960,6 +1076,9 @@ public class MapView extends FrameLayout {
     }
   }
 
+  /**
+   * Registers touch listeners.
+   */
   private class RegisterTouchListener implements MapboxMap.OnRegisterTouchListener {
 
     @Override
@@ -983,6 +1102,13 @@ public class MapView extends FrameLayout {
     }
   }
 
+  /**
+   * Invalidates current zoom to be at least at the provided value.
+   * <p>
+   * This is used for {@link TrackingSettings#setMyLocationTrackingMode(int)} as we need to zoom to at least 2
+   * to be able to show the correct user location as centered on the screen.
+   * </p>
+   */
   private class CameraZoomInvalidator implements TrackingSettings.CameraZoomInvalidator {
     @Override
     public void zoomTo(double zoomLevel) {
@@ -993,6 +1119,12 @@ public class MapView extends FrameLayout {
     }
   }
 
+  /**
+   * Receives map change events and notifies responsible components.
+   * <p>
+   * handles finalising MapboxMap intiaisation on style load and dispatches updates after a user interaction.
+   * </p>
+   */
   private static class MapCallback implements OnMapChangedListener {
 
     private final MapboxMap mapboxMap;

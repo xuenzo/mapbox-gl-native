@@ -1,5 +1,6 @@
 package com.mapbox.mapboxsdk.maps;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
@@ -83,6 +84,12 @@ public final class MapboxMap {
     this.onRegisterTouchListener = listener;
   }
 
+  /**
+   * Initialises MapboxMap with a Context and default configuration.
+   *
+   * @param context the Context used to initiase the MapboxMap, usually the Activity hosting the MapView
+   * @param options the default configuration of the MapView.
+   */
   void initialise(@NonNull Context context, @NonNull MapboxMapOptions options) {
     transform.initialise(this, options);
     uiSettings.initialise(context, options);
@@ -95,6 +102,12 @@ public final class MapboxMap {
     setStyleUrl(options);
   }
 
+  /**
+   * Called when the hosting Activity has been started.
+   *
+   * @see MapView#onStart()
+   * @see Activity#onStart()
+   */
   void onStart() {
     nativeMapView.update();
     trackingSettings.onStart();
@@ -104,10 +117,23 @@ public final class MapboxMap {
     }
   }
 
+  /**
+   * Called when the hosting Activity has been stopped.
+   *
+   * @see MapView#onStop()
+   * @see Activity#onStop()
+   */
   void onStop() {
     trackingSettings.onStop();
   }
 
+  /**
+   * Called when the hosting Activity state is being saved.
+   *
+   * @param outState the Bundle to save state to
+   * @see MapView#onSaveInstanceState(Bundle)
+   * @see Activity#onSaveInstanceState(Bundle)
+   */
   void onSaveInstanceState(Bundle outState) {
     outState.putParcelable(MapboxConstants.STATE_CAMERA_POSITION, transform.getCameraPosition());
     outState.putBoolean(MapboxConstants.STATE_DEBUG_ACTIVE, nativeMapView.getDebug());
@@ -116,6 +142,11 @@ public final class MapboxMap {
     uiSettings.onSaveInstanceState(outState);
   }
 
+  /**
+   * Called when the hosting Activity state is being restored
+   *
+   * @param savedInstanceState the Bundle to retreive state from
+   */
   void onRestoreInstanceState(Bundle savedInstanceState) {
     final CameraPosition cameraPosition = savedInstanceState.getParcelable(MapboxConstants.STATE_CAMERA_POSITION);
     if (cameraPosition != null) {
@@ -165,10 +196,10 @@ public final class MapboxMap {
   // Style
 
   /**
-   * <p>
    * Get the animation duration for style changes.
-   * </p>
+   * <p>
    * The default value is zero, so any changes take effect without animation.
+   * </p>
    *
    * @return Duration in seconds
    */
@@ -188,10 +219,10 @@ public final class MapboxMap {
   }
 
   /**
-   * <p>
    * Get the animation delay for style changes.
-   * </p>
+   * <p>
    * The default value is zero, so any changes begin to animate immediately.
+   * </p>
    *
    * @return Delay in seconds
    */
@@ -210,6 +241,12 @@ public final class MapboxMap {
     nativeMapView.setTransitionDelay(delay);
   }
 
+  /**
+   * Get a Layer using its id from the loaded style.
+   *
+   * @param layerId the unique identifier for a Layer
+   * @return the Layer if the layer exists in the loaded style, returns null if not
+   */
   @Nullable
   @UiThread
   public Layer getLayer(@NonNull String layerId) {
@@ -276,6 +313,12 @@ public final class MapboxMap {
     nativeMapView.removeLayer(layer);
   }
 
+  /**
+   * Gets the Source using its id, returns null if no source was found with the provided id.
+   *
+   * @param sourceId the unique identifier of the source
+   * @return the source if the source exist, null if not
+   */
   @Nullable
   @UiThread
   public Source getSource(@NonNull String sourceId) {
@@ -739,10 +782,20 @@ public final class MapboxMap {
     transform.setBearing(bearing, focalX, focalY, duration);
   }
 
+  /**
+   * Get the height of the map
+   *
+   * @return the height of the map
+   */
   public float getHeight() {
     return nativeMapView.getHeight();
   }
 
+  /**
+   * Get the widht of the map
+   *
+   * @return the measured width of the map
+   */
   public float getWidth() {
     return nativeMapView.getWidth();
   }
@@ -762,10 +815,10 @@ public final class MapboxMap {
   }
 
   /**
-   * <p>
    * Changes whether the map debug information is shown.
-   * </p>
+   * <p>
    * The default value is false.
+   * </p>
    *
    * @param debugActive If true, map debug information is shown.
    */
@@ -775,11 +828,11 @@ public final class MapboxMap {
   }
 
   /**
-   * <p>
    * Cycles through the map debug options.
-   * </p>
+   * <p>
    * The value of isDebugActive reflects whether there are
    * any map debug options enabled or disabled.
+   * </p>
    *
    * @see #isDebugActive()
    */
@@ -792,6 +845,11 @@ public final class MapboxMap {
   // API endpoint config
   //
 
+  /**
+   * Set a custom base URL for the API end point.
+   *
+   * @param options the options object containing the base URL
+   */
   private void setApiBaseUrl(@NonNull MapboxMapOptions options) {
     String apiBaseUrl = options.getApiBaseUrl();
     if (!TextUtils.isEmpty(apiBaseUrl)) {
@@ -893,11 +951,11 @@ public final class MapboxMap {
   //
 
   /**
-   * <p>
    * Adds a marker to this map.
-   * </p>
+   * <p>
    * The marker's icon is rendered on the map at the location {@code Marker.position}.
    * If {@code Marker.title} is defined, the map shows an info box with the marker's title and snippet.
+   * </p>
    *
    * @param markerOptions A marker options object that defines how to render the marker.
    * @return The {@code Marker} that was added to the map.
@@ -909,11 +967,11 @@ public final class MapboxMap {
   }
 
   /**
-   * <p>
    * Adds a marker to this map.
-   * </p>
+   * <p>
    * The marker's icon is rendered on the map at the location {@code Marker.position}.
    * If {@code Marker.title} is defined, the map shows an info box with the marker's title and snippet.
+   * </p>
    *
    * @param markerOptions A marker options object that defines how to render the marker.
    * @return The {@code Marker} that was added to the map.
@@ -925,11 +983,11 @@ public final class MapboxMap {
   }
 
   /**
-   * <p>
    * Adds a marker to this map.
-   * </p>
+   * <p>
    * The marker's icon is rendered on the map at the location {@code Marker.position}.
    * If {@code Marker.title} is defined, the map shows an info box with the marker's title and snippet.
+   * </p>
    *
    * @param markerOptions A marker options object that defines how to render the marker.
    * @return The {@code Marker} that was added to the map.
@@ -942,11 +1000,11 @@ public final class MapboxMap {
 
 
   /**
-   * <p>
    * Adds a marker to this map.
-   * </p>
+   * <p>
    * The marker's icon is rendered on the map at the location {@code Marker.position}.
    * If {@code Marker.title} is defined, the map shows an info box with the marker's title and snippet.
+   * </p>
    *
    * @param markerOptions             A marker options object that defines how to render the marker.
    * @param onMarkerViewAddedListener Callback invoked when the View has been added to the map.
@@ -960,7 +1018,14 @@ public final class MapboxMap {
   }
 
   /**
-   * FIXME javadoc
+   * Adds multiple markers to this map.
+   * <p>
+   * The marker's icon is rendered on the map at the location {@code Marker.position}.
+   * If {@code Marker.title} is defined, the map shows an info box with the marker's title and snippet.
+   * </p>
+   *
+   * @param markerViewOptions a list of marker options objects that defines how to render the markers
+   * @return a list of the Markers that were added to the map
    */
   @UiThread
   @NonNull
@@ -970,7 +1035,10 @@ public final class MapboxMap {
   }
 
   /**
-   * FIXME javadoc
+   * Get the MarkerViews found inside a rectangle on this map.
+   *
+   * @param rect the Rectangle to find markers in
+   * @return a list of the Markers found in the rectangle
    */
   @UiThread
   @NonNull
@@ -979,14 +1047,14 @@ public final class MapboxMap {
   }
 
   /**
-   * <p>
    * Adds multiple markers to this map.
-   * </p>
+   * <p>
    * The marker's icon is rendered on the map at the location {@code Marker.position}.
    * If {@code Marker.title} is defined, the map shows an info box with the marker's title and snippet.
+   * </p>
    *
-   * @param markerOptionsList A list of marker options objects that defines how to render the markers.
-   * @return A list of the {@code Marker}s that were added to the map.
+   * @param markerOptionsList A list of marker options objects that defines how to render the markers
+   * @return a list of the {@code Marker}s that were added to the map
    */
   @UiThread
   @NonNull
@@ -996,11 +1064,9 @@ public final class MapboxMap {
   }
 
   /**
-   * <p>
    * Updates a marker on this map. Does nothing if the marker isn't already added.
-   * </p>
    *
-   * @param updatedMarker An updated marker object.
+   * @param updatedMarker An updated marker object
    */
   @UiThread
   public void updateMarker(@NonNull Marker updatedMarker) {
@@ -1010,8 +1076,8 @@ public final class MapboxMap {
   /**
    * Adds a polyline to this map.
    *
-   * @param polylineOptions A polyline options object that defines how to render the polyline.
-   * @return The {@code Polyine} that was added to the map.
+   * @param polylineOptions A polyline options object that defines how to render the polyline
+   * @return The {@code Polyine} that was added to the map
    */
   @UiThread
   @NonNull
@@ -1034,7 +1100,7 @@ public final class MapboxMap {
   /**
    * Update a polyline on this map.
    *
-   * @param polyline An updated polyline object.
+   * @param polyline An updated polyline object
    */
   @UiThread
   public void updatePolyline(Polyline polyline) {
@@ -1044,8 +1110,8 @@ public final class MapboxMap {
   /**
    * Adds a polygon to this map.
    *
-   * @param polygonOptions A polygon options object that defines how to render the polygon.
-   * @return The {@code Polygon} that was added to the map.
+   * @param polygonOptions A polygon options object that defines how to render the polygon
+   * @return The {@code Polygon} that was added to the map
    */
   @UiThread
   @NonNull
@@ -1056,8 +1122,8 @@ public final class MapboxMap {
   /**
    * Adds multiple polygons to this map.
    *
-   * @param polygonOptionsList A list of polygon options objects that defines how to render the polygons.
-   * @return A list of the {@code Polygon}s that were added to the map.
+   * @param polygonOptionsList A list of polygon options objects that defines how to render the polygons
+   * @return A list of the {@code Polygon}s that were added to the map
    */
   @UiThread
   @NonNull
@@ -1069,7 +1135,7 @@ public final class MapboxMap {
   /**
    * Update a polygon on this map.
    *
-   * @param polygon An updated polygon object.
+   * @param polygon An updated polygon object
    */
   @UiThread
   public void updatePolygon(Polygon polygon) {
@@ -1118,7 +1184,7 @@ public final class MapboxMap {
   /**
    * Removes an annotation from the map.
    *
-   * @param annotation The annotation object to remove.
+   * @param annotation The annotation object to remove
    */
   @UiThread
   public void removeAnnotation(@NonNull Annotation annotation) {
@@ -1138,7 +1204,7 @@ public final class MapboxMap {
   /**
    * Removes multiple annotations from the map.
    *
-   * @param annotationList A list of annotation objects to remove.
+   * @param annotationList A list of annotation objects to remove
    */
   @UiThread
   public void removeAnnotations(@NonNull List<? extends Annotation> annotationList) {
@@ -1187,7 +1253,7 @@ public final class MapboxMap {
    * Returns a list of all the markers on the map.
    *
    * @return A list of all the markers objects. The returned object is a copy so modifying this
-   * list will not update the map.
+   * list will not update the map
    */
   @NonNull
   public List<Marker> getMarkers() {
@@ -1198,7 +1264,7 @@ public final class MapboxMap {
    * Returns a list of all the polygons on the map.
    *
    * @return A list of all the polygon objects. The returned object is a copy so modifying this
-   * list will not update the map.
+   * list will not update the map
    */
   @NonNull
   public List<Polygon> getPolygons() {
@@ -1209,7 +1275,7 @@ public final class MapboxMap {
    * Returns a list of all the polylines on the map.
    *
    * @return A list of all the polylines objects. The returned object is a copy so modifying this
-   * list will not update the map.
+   * list will not update the map
    */
   @NonNull
   public List<Polyline> getPolylines() {
@@ -1218,9 +1284,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked when the user clicks on a marker.
+   * <p>
+   * Unset this callback using null.
+   * </p>
    *
-   * @param listener The callback that's invoked when the user clicks on a marker.
-   *                 To unset the callback, use null.
+   * @param listener The callback that's invoked when the user clicks on a marker
    */
   @UiThread
   public void setOnMarkerClickListener(@Nullable OnMarkerClickListener listener) {
@@ -1228,14 +1296,14 @@ public final class MapboxMap {
   }
 
   /**
-   * <p>
    * Selects a marker. The selected marker will have it's info window opened.
    * Any other open info windows will be closed unless isAllowConcurrentMultipleOpenInfoWindows()
    * is true.
-   * </p>
+   * <p>
    * Selecting an already selected marker will have no effect.
+   * </p>
    *
-   * @param marker The marker to select.
+   * @param marker The marker to select
    */
   @UiThread
   public void selectMarker(@NonNull Marker marker) {
@@ -1338,10 +1406,8 @@ public final class MapboxMap {
   //
 
   /**
-   * <p>
    * Sets the distance from the edges of the map view’s frame to the edges of the map
    * view’s logical viewport.
-   * </p>
    * <p>
    * When the value of this property is equal to {0,0,0,0}, viewport
    * properties such as `centerCoordinate` assume a viewport that matches the map
@@ -1350,10 +1416,10 @@ public final class MapboxMap {
    * map center is effectively shifted downward.
    * </p>
    *
-   * @param left   The left margin in pixels.
-   * @param top    The top margin in pixels.
-   * @param right  The right margin in pixels.
-   * @param bottom The bottom margin in pixels.
+   * @param left   The left margin in pixels
+   * @param top    The top margin in pixels
+   * @param right  The right margin in pixels
+   * @param bottom The bottom margin in pixels
    */
   public void setPadding(int left, int top, int right, int bottom) {
     projection.setContentPadding(new int[] {left, top, right, bottom}, myLocationViewSettings.getPadding());
@@ -1363,7 +1429,7 @@ public final class MapboxMap {
   /**
    * Returns the current configured content padding on map view.
    *
-   * @return An array with length 4 in the LTRB order.
+   * @return An array with length 4 in the LTRB order
    */
   public int[] getPadding() {
     return projection.getContentPadding();
@@ -1375,9 +1441,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked on every change in camera position.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
    *
    * @param listener The callback that's invoked on every camera change position.
-   *                 To unset the callback, use null.
    */
   @UiThread
   public void setOnCameraChangeListener(@Nullable OnCameraChangeListener listener) {
@@ -1386,9 +1454,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked on every frame rendered to the map view.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
    *
-   * @param listener The callback that's invoked on every frame rendered to the map view.
-   *                 To unset the callback, use null.
+   * @param listener The callback that's invoked on every frame rendered to the map view
    */
   @UiThread
   public void setOnFpsChangedListener(@Nullable OnFpsChangedListener listener) {
@@ -1402,9 +1472,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked when the map is scrolled.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
    *
-   * @param listener The callback that's invoked when the map is scrolled.
-   *                 To unset the callback, use null.
+   * @param listener The callback that's invoked when the map is scrolled
    */
   @UiThread
   public void setOnScrollListener(@Nullable OnScrollListener listener) {
@@ -1413,9 +1485,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked when the map is flinged.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
    *
-   * @param listener The callback that's invoked when the map is flinged.
-   *                 To unset the callback, use null.
+   * @param listener The callback that's invoked when the map is flinged
    */
   @UiThread
   public void setOnFlingListener(@Nullable OnFlingListener listener) {
@@ -1424,9 +1498,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked when the user clicks on the map view.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
    *
-   * @param listener The callback that's invoked when the user clicks on the map view.
-   *                 To unset the callback, use null.
+   * @param listener The callback that's invoked when the user clicks on the map view
    */
   @UiThread
   public void setOnMapClickListener(@Nullable OnMapClickListener listener) {
@@ -1435,9 +1511,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked when the user long clicks on the map view.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
    *
-   * @param listener The callback that's invoked when the user long clicks on the map view.
-   *                 To unset the callback, use null.
+   * @param listener The callback that's invoked when the user long clicks on the map view
    */
   @UiThread
   public void setOnMapLongClickListener(@Nullable OnMapLongClickListener listener) {
@@ -1446,9 +1524,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked when the user clicks on an info window.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
    *
-   * @param listener The callback that's invoked when the user clicks on an info window.
-   *                 To unset the callback, use null.
+   * @param listener The callback that's invoked when the user clicks on an info window
    */
   @UiThread
   public void setOnInfoWindowClickListener(@Nullable OnInfoWindowClickListener listener) {
@@ -1456,9 +1536,9 @@ public final class MapboxMap {
   }
 
   /**
-   * Return the InfoWindow click listener
+   * Return the InfoWindow click listener.
    *
-   * @return Current active InfoWindow Click Listener
+   * @return the current active infoWindow click listener
    */
   @UiThread
   public OnInfoWindowClickListener getOnInfoWindowClickListener() {
@@ -1467,9 +1547,11 @@ public final class MapboxMap {
 
   /**
    * Sets a callback that's invoked when a marker's info window is long pressed.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
    *
-   * @param listener The callback that's invoked when a marker's info window is long pressed. To unset the callback,
-   *                 use null.
+   * @param listener The callback that's invoked when a marker's info window is long pressed.
    */
   @UiThread
   public void setOnInfoWindowLongClickListener(@Nullable OnInfoWindowLongClickListener
@@ -1486,6 +1568,14 @@ public final class MapboxMap {
     return annotationManager.getInfoWindowManager().getOnInfoWindowLongClickListener();
   }
 
+  /**
+   * Sets a callback that's invoked when an infoWindow is closed.
+   * <p>
+   * To unset the callback, use null.
+   * </p>
+   *
+   * @param listener the callback that's invoked when an infoWindow is closed.
+   */
   public void setOnInfoWindowCloseListener(@Nullable OnInfoWindowCloseListener listener) {
     annotationManager.getInfoWindowManager().setOnInfoWindowCloseListener(listener);
   }
@@ -1585,7 +1675,6 @@ public final class MapboxMap {
    * Takes a snapshot of the map.
    *
    * @param callback Callback method invoked when the snapshot is taken.
-   * @param bitmap   A pre-allocated bitmap.
    */
   @UiThread
   public void snapshot(@NonNull SnapshotReadyCallback callback) {
@@ -1593,7 +1682,7 @@ public final class MapboxMap {
   }
 
   /**
-   * Queries the map for rendered features
+   * Queries the map for rendered features.
    *
    * @param coordinates the point to query
    * @param layerIds    optionally - only query these layers
@@ -1601,13 +1690,12 @@ public final class MapboxMap {
    */
   @UiThread
   @NonNull
-  public List<Feature> queryRenderedFeatures(@NonNull PointF coordinates, @Nullable String...
-    layerIds) {
+  public List<Feature> queryRenderedFeatures(@NonNull PointF coordinates, @Nullable String... layerIds) {
     return nativeMapView.queryRenderedFeatures(coordinates, layerIds);
   }
 
   /**
-   * Queries the map for rendered features
+   * Queries the map for rendered features.
    *
    * @param coordinates the box to query
    * @param layerIds    optionally - only query these layers
@@ -2001,7 +2089,8 @@ public final class MapboxMap {
   }
 
   //
-  // Used for instrumentation testing
+  // Used for instrumentation testing,
+  // TODO: 27/02/2017  replace with reflection
   //
   Transform getTransform() {
     return transform;
