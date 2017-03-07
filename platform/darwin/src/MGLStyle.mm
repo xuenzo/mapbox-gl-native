@@ -28,6 +28,7 @@
 #include <mbgl/util/default_styles.hpp>
 #include <mbgl/sprite/sprite_image.hpp>
 #include <mbgl/style/layers/fill_layer.hpp>
+#include <mbgl/style/layers/fill_extrusion_layer.hpp>
 #include <mbgl/style/layers/line_layer.hpp>
 #include <mbgl/style/layers/symbol_layer.hpp>
 #include <mbgl/style/layers/raster_layer.hpp>
@@ -327,6 +328,9 @@ static NSURL *MGLStyleURL_emerald;
     if (auto fillLayer = mbglLayer->as<mbgl::style::FillLayer>()) {
         MGLSource *source = [self sourceWithIdentifier:@(fillLayer->getSourceID().c_str())];
         styleLayer = [[MGLFillStyleLayer alloc] initWithIdentifier:identifier source:source];
+    } else if (auto fillExtrusionLayer = mbglLayer->as<mbgl::style::FillExtrusionLayer>()) {
+        MGLSource *source = [self sourceWithIdentifier:@(fillExtrusionLayer->getSourceID().c_str())];
+        styleLayer = [[MGLLineStyleLayer alloc] initWithIdentifier:identifier source:source];
     } else if (auto lineLayer = mbglLayer->as<mbgl::style::LineLayer>()) {
         MGLSource *source = [self sourceWithIdentifier:@(lineLayer->getSourceID().c_str())];
         styleLayer = [[MGLLineStyleLayer alloc] initWithIdentifier:identifier source:source];
