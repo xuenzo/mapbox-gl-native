@@ -255,6 +255,37 @@ In style JSON | In Objective-C | In Swift
 `fill-translate` | `MGLFillStyleLayer.fillTranslation` | `MGLFillStyleLayer.fillTranslation`
 `fill-translate-anchor` | `MGLFillStyleLayer.fillTranslationAnchor` | `MGLFillStyleLayer.fillTranslationAnchor`
 
+### FillExtrusion style functions
+
+The runtime styling API introduces `MGLStyleFunction` to the iOS SDK.
+[Data-driven styling](data-driven-styling.html) expands `MGLStyleFunction`.
+Individual style property documentation includes which subclasses of
+`MGLStyleFunction` are enabled for that property. You can use `MGLStyleValue`
+methods to create a `MGLStyleFunction`.
+
+In style specification | In the SDK                    | [MGLStyleValue valueWithInterpolationMode:...]
+-----------------------|-------------------------------|-------------
+`zoom function`        | `MGLCameraStyleFunction`      | `cameraStops:options:`
+`property function`    | `MGLSourceStyleFunction`      | `sourceStops:attributeName:options:`
+`zoom-and-property functions`| `MGLCompositeStyleFunction` | `compositeStops:attributeName:options:`
+
+Data-driven styling also introduces interpolation mode, which defines the
+relationship between style values and attributes or zoom levels.
+
+In style specification       | In the SDK
+-----------------------------|-----------
+`exponential`                | `MGLInterpolationModeExponential`
+`interval`                   | `MGLInterpolationModeInterval`
+`categorical`                | `MGLInterpolationModeCategorical`
+`identity`                   | `MGLInterpolationModeIdentity`
+
+### FillExtrusion style layers
+
+In style JSON | In Objective-C | In Swift
+--------------|----------------|---------
+`fill-extrusion-translate` | `MGLFillExtrusionStyleLayer.fillExtrusionTranslation` | `MGLFillExtrusionStyleLayer.fillExtrusionTranslation`
+`fill-extrusion-translate-anchor` | `MGLFillExtrusionStyleLayer.fillExtrusionTranslationAnchor` | `MGLFillExtrusionStyleLayer.fillExtrusionTranslationAnchor`
+
 ### Line style functions
 
 The runtime styling API introduces `MGLStyleFunction` to the iOS SDK.
