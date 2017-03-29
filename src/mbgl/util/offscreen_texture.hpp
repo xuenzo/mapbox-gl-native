@@ -12,7 +12,7 @@ class Texture;
 
 class OffscreenTexture : public View {
 public:
-    OffscreenTexture(gl::Context&, Size size = { 256, 256 });
+    OffscreenTexture(gl::Context&, Size size = { 256, 256 }, gl::TextureUnit unit = 0);
     ~OffscreenTexture();
 
     void bind() override;
