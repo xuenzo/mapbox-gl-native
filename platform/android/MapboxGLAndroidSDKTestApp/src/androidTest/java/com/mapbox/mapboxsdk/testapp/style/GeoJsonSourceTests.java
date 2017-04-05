@@ -14,6 +14,7 @@ import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.testapp.R;
+import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 import com.mapbox.mapboxsdk.testapp.activity.style.RuntimeStyleTestActivity;
 import com.mapbox.mapboxsdk.testapp.utils.OnMapReadyIdlingResource;
 import com.mapbox.mapboxsdk.testapp.utils.ViewUtils;
@@ -45,34 +46,20 @@ import static org.junit.Assert.fail;
  * Tests for {@link GeoJsonSource}
  */
 @RunWith(AndroidJUnit4.class)
-public class GeoJsonSourceTests {
+public class GeoJsonSourceTests extends BaseActivityTest {
 
-  @Rule
-  public final ActivityTestRule<RuntimeStyleTestActivity> rule =
-    new ActivityTestRule<>(RuntimeStyleTestActivity.class);
-
-  private OnMapReadyIdlingResource idlingResource;
-
-  @Before
-  public void registerIdlingResource() {
-    idlingResource = new OnMapReadyIdlingResource(rule.getActivity());
-    Espresso.registerIdlingResources(idlingResource);
-  }
-
-  @After
-  public void unregisterIntentServiceIdlingResource() {
-    Espresso.unregisterIdlingResources(idlingResource);
+  @Override
+  protected Class getActivityClass() {
+    return RuntimeStyleTestActivity.class;
   }
 
   @Test
   public void testFeatureCollection() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
     onView(withId(R.id.mapView)).perform(new BaseViewAction() {
 
       @Override
       public void perform(UiController uiController, View view) {
-        MapboxMap mapboxMap = rule.getActivity().getMapboxMap();
-
         GeoJsonSource source = new GeoJsonSource("source", FeatureCollection
           .fromJson(readRawResource(rule.getActivity().getResources(), R.raw.test_feature_collection)));
         mapboxMap.addSource(source);
@@ -85,13 +72,11 @@ public class GeoJsonSourceTests {
 
   @Test
   public void testPointGeometry() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
     onView(withId(R.id.mapView)).perform(new BaseViewAction() {
 
       @Override
       public void perform(UiController uiController, View view) {
-        MapboxMap mapboxMap = rule.getActivity().getMapboxMap();
-
         GeoJsonSource source = new GeoJsonSource("source", Point.fromCoordinates(new double[] {0d, 0d}));
         mapboxMap.addSource(source);
 
@@ -103,13 +88,11 @@ public class GeoJsonSourceTests {
 
   @Test
   public void testFeatureProperties() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
     onView(withId(R.id.mapView)).perform(new BaseViewAction() {
 
       @Override
       public void perform(UiController uiController, View view) {
-        MapboxMap mapboxMap = rule.getActivity().getMapboxMap();
-
         GeoJsonSource source = new GeoJsonSource("source",
           readRawResource(rule.getActivity().getResources(), R.raw.test_feature_properties));
         mapboxMap.addSource(source);
@@ -156,13 +139,11 @@ public class GeoJsonSourceTests {
   }
 
   protected void testFeatureFromResource(final @RawRes int resource) {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
     onView(withId(R.id.mapView)).perform(new BaseViewAction() {
 
       @Override
       public void perform(UiController uiController, View view) {
-        MapboxMap mapboxMap = rule.getActivity().getMapboxMap();
-
         GeoJsonSource source = new GeoJsonSource("source");
         mapboxMap.addSource(source);
         Layer layer = new CircleLayer("layer", source.getId());

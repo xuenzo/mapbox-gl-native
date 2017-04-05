@@ -13,6 +13,7 @@ import android.view.View;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.testapp.R;
+import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 import com.mapbox.mapboxsdk.testapp.activity.feature.QueryRenderedFeaturesPropertiesActivity;
 import com.mapbox.mapboxsdk.testapp.utils.OnMapReadyIdlingResource;
 
@@ -31,33 +32,20 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 /**
  * Instrumentation test to validate if clicking center of screen returns the correct features.
  */
-public class QueryRenderedFeaturesPropertiesTest {
+public class QueryRenderedFeaturesPropertiesTest extends BaseActivityTest {
 
-  @Rule
-  public final ActivityTestRule<QueryRenderedFeaturesPropertiesActivity> rule =
-    new ActivityTestRule<>(QueryRenderedFeaturesPropertiesActivity.class);
-
-  private OnMapReadyIdlingResource idlingResource;
-
-  @Before
-  public void registerIdlingResource() {
-    idlingResource = new OnMapReadyIdlingResource(rule.getActivity());
-    Espresso.registerIdlingResources(idlingResource);
+  @Override
+  protected Class getActivityClass() {
+    return QueryRenderedFeaturesPropertiesActivity.class;
   }
 
   @Test
   @Ignore
   public void testCountFeatures() {
-    MapboxMap mapboxMap = rule.getActivity().getMapboxMap();
     LatLng centerScreen = mapboxMap.getCameraPosition().target;
     PointF centerPixel = mapboxMap.getProjection().toScreenLocation(centerScreen);
     onView(withId(R.id.mapView)).perform(clickXY(centerPixel.x, centerPixel.y));
     onView(withText("Found 4 features")).check(matches(isDisplayed()));
-  }
-
-  @After
-  public void unregisterIdlingResource() {
-    Espresso.unregisterIdlingResources(idlingResource);
   }
 
   private static ViewAction clickXY(final float x, final float y) {

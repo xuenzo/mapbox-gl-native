@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.testapp.R;
+import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 import com.mapbox.mapboxsdk.testapp.activity.espresso.EspressoTestActivity;
 import com.mapbox.mapboxsdk.testapp.utils.OnMapReadyIdlingResource;
 import com.mapbox.mapboxsdk.testapp.utils.ViewUtils;
@@ -21,6 +22,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import timber.log.Timber;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -35,20 +38,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 
-public class AttributionTest {
-
-  @Rule
-  public final ActivityTestRule<EspressoTestActivity> rule = new ActivityTestRule<>(EspressoTestActivity.class);
-
-  private OnMapReadyIdlingResource idlingResource;
+public class AttributionTest extends BaseActivityTest {
 
   private String[] dialogTexts;
   private String[] dialogLinks;
 
+  @Override
+  protected Class getActivityClass() {
+    return EspressoTestActivity.class;
+  }
+
   @Before
   public void beforeTest() {
-    idlingResource = new OnMapReadyIdlingResource(rule.getActivity());
-    Espresso.registerIdlingResources(idlingResource);
+    super.beforeTest();
     Intents.init();
     dialogTexts = rule.getActivity().getResources().getStringArray(R.array.mapbox_attribution_names);
     dialogLinks = rule.getActivity().getResources().getStringArray(R.array.mapbox_attribution_links);
@@ -56,8 +58,7 @@ public class AttributionTest {
 
   @Test
   public void testDisabled() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
-    MapboxMap mapboxMap = rule.getActivity().getMapboxMap();
+    validateTestSetup();
 
     // Default
     onView(withId(R.id.attributionView)).check(matches(isDisplayed()));
@@ -70,7 +71,7 @@ public class AttributionTest {
 
   @Test
   public void testMapboxLink() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
 
     // click on View to open dialog
     onView(withId(R.id.attributionView)).perform(click());
@@ -85,7 +86,7 @@ public class AttributionTest {
 
   @Test
   public void testOpenStreetMapLink() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
 
     // click on View to open dialog
     onView(withId(R.id.attributionView)).perform(click());
@@ -99,7 +100,7 @@ public class AttributionTest {
 
   @Test
   public void testImproveMapLink() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
 
     // click on View to open dialog
     onView(withId(R.id.attributionView)).perform(click());
@@ -113,7 +114,7 @@ public class AttributionTest {
 
   @Test
   public void testTelemetryDialog() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
 
     // click on View to open dialog
     onView(withId(R.id.attributionView)).perform(click());
@@ -126,8 +127,8 @@ public class AttributionTest {
 
   @After
   public void afterTest() {
+    super.afterTest();
     Intents.release();
-    Espresso.unregisterIdlingResources(idlingResource);
   }
 
   private class DisableAction implements ViewAction {

@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.testapp.R;
 import com.mapbox.mapboxsdk.testapp.activity.style.RuntimeStyleTestActivity;
 import com.mapbox.mapboxsdk.testapp.utils.OnMapReadyIdlingResource;
+import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,28 +38,22 @@ import static com.mapbox.mapboxsdk.style.layers.Property.*;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
 
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
+import com.mapbox.mapboxsdk.testapp.activity.espresso.EspressoTestActivity;
 
 /**
  * Basic smoke tests for SymbolLayer
  */
 @RunWith(AndroidJUnit4.class)
-public class SymbolLayerTest extends BaseStyleTest {
-
-  @Rule
-  public final ActivityTestRule<RuntimeStyleTestActivity> rule = new ActivityTestRule<>(RuntimeStyleTestActivity.class);
+public class SymbolLayerTest extends BaseActivityTest {
 
   private SymbolLayer layer;
 
-  private OnMapReadyIdlingResource idlingResource;
+  @Override
+  protected Class getActivityClass() {
+    return EspressoTestActivity.class;
+  }
 
-  private MapboxMap mapboxMap;
-
-  @Before
-  public void setup() {
-    idlingResource = new OnMapReadyIdlingResource(rule.getActivity());
-    Espresso.registerIdlingResources(idlingResource);
-    mapboxMap = rule.getActivity().getMapboxMap();
-
+  private void setupLayer(){
     if ((layer = mapboxMap.getLayerAs("my-layer")) == null) {
       Timber.i("Adding layer");
       layer = new SymbolLayer("my-layer", "composite");
@@ -71,7 +66,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testSetVisibility() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("Visibility");
     assertNotNull(layer);
 
@@ -86,7 +82,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testSymbolPlacementAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("symbol-placement");
     assertNotNull(layer);
 
@@ -97,7 +94,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testSymbolPlacementAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("symbol-placement");
     assertNotNull(layer);
 
@@ -123,7 +121,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testSymbolSpacingAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("symbol-spacing");
     assertNotNull(layer);
 
@@ -134,7 +133,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testSymbolSpacingAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("symbol-spacing");
     assertNotNull(layer);
 
@@ -161,7 +161,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testSymbolAvoidEdgesAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("symbol-avoid-edges");
     assertNotNull(layer);
 
@@ -172,7 +173,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testSymbolAvoidEdgesAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("symbol-avoid-edges");
     assertNotNull(layer);
 
@@ -198,7 +200,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconAllowOverlapAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-allow-overlap");
     assertNotNull(layer);
 
@@ -209,7 +212,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconAllowOverlapAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-allow-overlap");
     assertNotNull(layer);
 
@@ -235,7 +239,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconIgnorePlacementAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-ignore-placement");
     assertNotNull(layer);
 
@@ -246,7 +251,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconIgnorePlacementAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-ignore-placement");
     assertNotNull(layer);
 
@@ -272,7 +278,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOptionalAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-optional");
     assertNotNull(layer);
 
@@ -283,7 +290,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOptionalAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-optional");
     assertNotNull(layer);
 
@@ -309,7 +317,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconRotationAlignmentAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-rotation-alignment");
     assertNotNull(layer);
 
@@ -320,7 +329,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconRotationAlignmentAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-rotation-alignment");
     assertNotNull(layer);
 
@@ -346,7 +356,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconSizeAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-size");
     assertNotNull(layer);
 
@@ -357,7 +368,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconSizeAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-size");
     assertNotNull(layer);
 
@@ -492,7 +504,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTextFitAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-text-fit");
     assertNotNull(layer);
 
@@ -503,7 +516,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTextFitAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-text-fit");
     assertNotNull(layer);
 
@@ -529,7 +543,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTextFitPaddingAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-text-fit-padding");
     assertNotNull(layer);
 
@@ -540,7 +555,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTextFitPaddingAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-text-fit-padding");
     assertNotNull(layer);
 
@@ -567,7 +583,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconImageAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-image");
     assertNotNull(layer);
 
@@ -578,7 +595,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconImageAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-image");
     assertNotNull(layer);
 
@@ -601,10 +619,10 @@ public class SymbolLayerTest extends BaseStyleTest {
     assertEquals(1, ((IntervalStops) layer.getIconImage().getFunction().getStops()).size());
   }
 
-
   @Test
   public void testIconImageAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-image");
     assertNotNull(layer);
 
@@ -623,7 +641,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconImageAsIntervalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-image");
     assertNotNull(layer);
 
@@ -647,9 +666,11 @@ public class SymbolLayerTest extends BaseStyleTest {
     assertEquals(IntervalStops.class, layer.getIconImage().getFunction().getStops().getClass());
   }
 
+
   @Test
   public void testIconRotateAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-rotate");
     assertNotNull(layer);
 
@@ -660,7 +681,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconRotateAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-rotate");
     assertNotNull(layer);
 
@@ -686,7 +708,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconRotateAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-rotate");
     assertNotNull(layer);
 
@@ -705,7 +728,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconRotateAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-rotate");
     assertNotNull(layer);
 
@@ -731,7 +755,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconRotateAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-rotate");
     assertNotNull(layer);
 
@@ -760,7 +785,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconRotateAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-rotate");
     assertNotNull(layer);
 
@@ -795,7 +821,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconPaddingAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-padding");
     assertNotNull(layer);
 
@@ -806,7 +833,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconPaddingAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-padding");
     assertNotNull(layer);
 
@@ -833,7 +861,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconKeepUprightAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-keep-upright");
     assertNotNull(layer);
 
@@ -844,7 +873,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconKeepUprightAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-keep-upright");
     assertNotNull(layer);
 
@@ -870,7 +900,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOffsetAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-offset");
     assertNotNull(layer);
 
@@ -881,7 +912,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOffsetAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-offset");
     assertNotNull(layer);
 
@@ -907,7 +939,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOffsetAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-offset");
     assertNotNull(layer);
 
@@ -926,7 +959,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOffsetAsIntervalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-offset");
     assertNotNull(layer);
 
@@ -953,7 +987,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextPitchAlignmentAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-pitch-alignment");
     assertNotNull(layer);
 
@@ -964,7 +999,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextPitchAlignmentAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-pitch-alignment");
     assertNotNull(layer);
 
@@ -990,7 +1026,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextRotationAlignmentAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-rotation-alignment");
     assertNotNull(layer);
 
@@ -1001,7 +1038,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextRotationAlignmentAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-rotation-alignment");
     assertNotNull(layer);
 
@@ -1027,7 +1065,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextFieldAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-field");
     assertNotNull(layer);
 
@@ -1038,7 +1077,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextFieldAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-field");
     assertNotNull(layer);
 
@@ -1063,7 +1103,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextFieldAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-field");
     assertNotNull(layer);
 
@@ -1082,7 +1123,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextFieldAsIntervalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-field");
     assertNotNull(layer);
 
@@ -1109,7 +1151,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextFontAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-font");
     assertNotNull(layer);
 
@@ -1120,7 +1163,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextFontAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-font");
     assertNotNull(layer);
 
@@ -1146,7 +1190,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextSizeAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-size");
     assertNotNull(layer);
 
@@ -1157,7 +1202,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextSizeAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-size");
     assertNotNull(layer);
 
@@ -1292,7 +1338,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextMaxWidthAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-max-width");
     assertNotNull(layer);
 
@@ -1303,7 +1350,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextMaxWidthAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-max-width");
     assertNotNull(layer);
 
@@ -1330,7 +1378,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextLineHeightAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-line-height");
     assertNotNull(layer);
 
@@ -1341,7 +1390,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextLineHeightAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-line-height");
     assertNotNull(layer);
 
@@ -1368,7 +1418,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextLetterSpacingAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-letter-spacing");
     assertNotNull(layer);
 
@@ -1379,7 +1430,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextLetterSpacingAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-letter-spacing");
     assertNotNull(layer);
 
@@ -1406,7 +1458,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextJustifyAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-justify");
     assertNotNull(layer);
 
@@ -1417,7 +1470,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextJustifyAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-justify");
     assertNotNull(layer);
 
@@ -1443,7 +1497,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextAnchorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-anchor");
     assertNotNull(layer);
 
@@ -1454,7 +1509,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextAnchorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-anchor");
     assertNotNull(layer);
 
@@ -1480,7 +1536,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextMaxAngleAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-max-angle");
     assertNotNull(layer);
 
@@ -1491,7 +1548,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextMaxAngleAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-max-angle");
     assertNotNull(layer);
 
@@ -1518,7 +1576,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextRotateAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-rotate");
     assertNotNull(layer);
 
@@ -1529,7 +1588,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextRotateAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-rotate");
     assertNotNull(layer);
 
@@ -1553,10 +1613,10 @@ public class SymbolLayerTest extends BaseStyleTest {
     assertEquals(1, ((ExponentialStops) layer.getTextRotate().getFunction().getStops()).size());
   }
 
-
   @Test
   public void testTextRotateAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-rotate");
     assertNotNull(layer);
 
@@ -1575,7 +1635,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextRotateAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-rotate");
     assertNotNull(layer);
 
@@ -1601,7 +1662,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextRotateAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-rotate");
     assertNotNull(layer);
 
@@ -1630,7 +1692,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextRotateAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-rotate");
     assertNotNull(layer);
 
@@ -1662,9 +1725,11 @@ public class SymbolLayerTest extends BaseStyleTest {
     assertEquals(0.9f, stop.out, 0.001f);
   }
 
+
   @Test
   public void testTextPaddingAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-padding");
     assertNotNull(layer);
 
@@ -1675,7 +1740,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextPaddingAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-padding");
     assertNotNull(layer);
 
@@ -1702,7 +1768,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextKeepUprightAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-keep-upright");
     assertNotNull(layer);
 
@@ -1713,7 +1780,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextKeepUprightAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-keep-upright");
     assertNotNull(layer);
 
@@ -1739,7 +1807,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTransformAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-transform");
     assertNotNull(layer);
 
@@ -1750,7 +1819,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTransformAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-transform");
     assertNotNull(layer);
 
@@ -1775,7 +1845,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTransformAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-transform");
     assertNotNull(layer);
 
@@ -1794,7 +1865,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTransformAsIntervalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-transform");
     assertNotNull(layer);
 
@@ -1821,7 +1893,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOffsetAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-offset");
     assertNotNull(layer);
 
@@ -1832,7 +1905,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOffsetAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-offset");
     assertNotNull(layer);
 
@@ -1858,7 +1932,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOffsetAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-offset");
     assertNotNull(layer);
 
@@ -1877,7 +1952,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOffsetAsIntervalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-offset");
     assertNotNull(layer);
 
@@ -1904,7 +1980,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextAllowOverlapAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-allow-overlap");
     assertNotNull(layer);
 
@@ -1915,7 +1992,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextAllowOverlapAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-allow-overlap");
     assertNotNull(layer);
 
@@ -1941,7 +2019,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextIgnorePlacementAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-ignore-placement");
     assertNotNull(layer);
 
@@ -1952,7 +2031,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextIgnorePlacementAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-ignore-placement");
     assertNotNull(layer);
 
@@ -1978,7 +2058,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOptionalAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-optional");
     assertNotNull(layer);
 
@@ -1989,7 +2070,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOptionalAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-optional");
     assertNotNull(layer);
 
@@ -2014,7 +2096,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOpacityTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-opacityTransitionOptions");
     assertNotNull(layer);
 
@@ -2026,7 +2109,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOpacityAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-opacity");
     assertNotNull(layer);
 
@@ -2037,7 +2121,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOpacityAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-opacity");
     assertNotNull(layer);
 
@@ -2063,7 +2148,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOpacityAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-opacity");
     assertNotNull(layer);
 
@@ -2082,7 +2168,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOpacityAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-opacity");
     assertNotNull(layer);
 
@@ -2108,7 +2195,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOpacityAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-opacity");
     assertNotNull(layer);
 
@@ -2137,7 +2225,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconOpacityAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-opacity");
     assertNotNull(layer);
 
@@ -2171,7 +2260,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconColorTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-colorTransitionOptions");
     assertNotNull(layer);
 
@@ -2183,7 +2273,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconColorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-color");
     assertNotNull(layer);
 
@@ -2194,7 +2285,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconColorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-color");
     assertNotNull(layer);
 
@@ -2220,7 +2312,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconColorAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-color");
     assertNotNull(layer);
 
@@ -2239,7 +2332,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconColorAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-color");
     assertNotNull(layer);
 
@@ -2265,7 +2359,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconColorAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-color");
     assertNotNull(layer);
 
@@ -2294,7 +2389,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconColorAsIntConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-color");
     assertNotNull(layer);
 
@@ -2305,7 +2401,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloColorTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-colorTransitionOptions");
     assertNotNull(layer);
 
@@ -2317,7 +2414,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloColorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-color");
     assertNotNull(layer);
 
@@ -2328,7 +2426,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloColorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-color");
     assertNotNull(layer);
 
@@ -2354,7 +2453,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloColorAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-color");
     assertNotNull(layer);
 
@@ -2373,7 +2473,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloColorAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-color");
     assertNotNull(layer);
 
@@ -2399,7 +2500,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloColorAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-color");
     assertNotNull(layer);
 
@@ -2428,7 +2530,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloColorAsIntConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-color");
     assertNotNull(layer);
 
@@ -2439,7 +2542,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloWidthTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-widthTransitionOptions");
     assertNotNull(layer);
 
@@ -2451,7 +2555,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloWidthAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-width");
     assertNotNull(layer);
 
@@ -2462,7 +2567,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloWidthAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-width");
     assertNotNull(layer);
 
@@ -2488,7 +2594,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloWidthAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-width");
     assertNotNull(layer);
 
@@ -2507,7 +2614,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloWidthAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-width");
     assertNotNull(layer);
 
@@ -2533,7 +2641,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloWidthAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-width");
     assertNotNull(layer);
 
@@ -2562,7 +2671,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloWidthAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-width");
     assertNotNull(layer);
 
@@ -2596,7 +2706,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloBlurTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-blurTransitionOptions");
     assertNotNull(layer);
 
@@ -2608,7 +2719,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloBlurAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-blur");
     assertNotNull(layer);
 
@@ -2619,7 +2731,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloBlurAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-blur");
     assertNotNull(layer);
 
@@ -2645,7 +2758,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloBlurAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-blur");
     assertNotNull(layer);
 
@@ -2664,7 +2778,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloBlurAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-blur");
     assertNotNull(layer);
 
@@ -2690,7 +2805,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloBlurAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-blur");
     assertNotNull(layer);
 
@@ -2719,7 +2835,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconHaloBlurAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-halo-blur");
     assertNotNull(layer);
 
@@ -2753,7 +2870,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTranslateTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-translateTransitionOptions");
     assertNotNull(layer);
 
@@ -2765,7 +2883,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTranslateAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-translate");
     assertNotNull(layer);
 
@@ -2776,7 +2895,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTranslateAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-translate");
     assertNotNull(layer);
 
@@ -2803,7 +2923,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTranslateAnchorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-translate-anchor");
     assertNotNull(layer);
 
@@ -2814,7 +2935,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testIconTranslateAnchorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("icon-translate-anchor");
     assertNotNull(layer);
 
@@ -2839,7 +2961,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOpacityTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-opacityTransitionOptions");
     assertNotNull(layer);
 
@@ -2851,7 +2974,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOpacityAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-opacity");
     assertNotNull(layer);
 
@@ -2862,7 +2986,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOpacityAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-opacity");
     assertNotNull(layer);
 
@@ -2888,7 +3013,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOpacityAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-opacity");
     assertNotNull(layer);
 
@@ -2907,7 +3033,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOpacityAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-opacity");
     assertNotNull(layer);
 
@@ -2933,7 +3060,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOpacityAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-opacity");
     assertNotNull(layer);
 
@@ -2962,7 +3090,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextOpacityAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-opacity");
     assertNotNull(layer);
 
@@ -2996,7 +3125,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextColorTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-colorTransitionOptions");
     assertNotNull(layer);
 
@@ -3008,7 +3138,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextColorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-color");
     assertNotNull(layer);
 
@@ -3019,7 +3150,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextColorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-color");
     assertNotNull(layer);
 
@@ -3045,7 +3177,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextColorAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-color");
     assertNotNull(layer);
 
@@ -3064,7 +3197,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextColorAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-color");
     assertNotNull(layer);
 
@@ -3090,7 +3224,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextColorAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-color");
     assertNotNull(layer);
 
@@ -3119,7 +3254,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextColorAsIntConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-color");
     assertNotNull(layer);
 
@@ -3130,7 +3266,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloColorTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-colorTransitionOptions");
     assertNotNull(layer);
 
@@ -3142,7 +3279,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloColorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-color");
     assertNotNull(layer);
 
@@ -3153,7 +3291,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloColorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-color");
     assertNotNull(layer);
 
@@ -3179,7 +3318,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloColorAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-color");
     assertNotNull(layer);
 
@@ -3198,7 +3338,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloColorAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-color");
     assertNotNull(layer);
 
@@ -3224,7 +3365,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloColorAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-color");
     assertNotNull(layer);
 
@@ -3253,7 +3395,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloColorAsIntConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-color");
     assertNotNull(layer);
 
@@ -3264,7 +3407,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloWidthTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-widthTransitionOptions");
     assertNotNull(layer);
 
@@ -3276,7 +3420,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloWidthAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-width");
     assertNotNull(layer);
 
@@ -3287,7 +3432,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloWidthAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-width");
     assertNotNull(layer);
 
@@ -3313,7 +3459,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloWidthAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-width");
     assertNotNull(layer);
 
@@ -3332,7 +3479,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloWidthAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-width");
     assertNotNull(layer);
 
@@ -3358,7 +3506,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloWidthAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-width");
     assertNotNull(layer);
 
@@ -3387,7 +3536,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloWidthAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-width");
     assertNotNull(layer);
 
@@ -3421,7 +3571,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloBlurTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-blurTransitionOptions");
     assertNotNull(layer);
 
@@ -3433,7 +3584,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloBlurAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-blur");
     assertNotNull(layer);
 
@@ -3444,7 +3596,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloBlurAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-blur");
     assertNotNull(layer);
 
@@ -3470,7 +3623,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloBlurAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-blur");
     assertNotNull(layer);
 
@@ -3489,7 +3643,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloBlurAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-blur");
     assertNotNull(layer);
 
@@ -3515,7 +3670,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloBlurAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-blur");
     assertNotNull(layer);
 
@@ -3544,7 +3700,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextHaloBlurAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-halo-blur");
     assertNotNull(layer);
 
@@ -3578,7 +3735,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTranslateTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-translateTransitionOptions");
     assertNotNull(layer);
 
@@ -3590,7 +3748,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTranslateAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-translate");
     assertNotNull(layer);
 
@@ -3601,7 +3760,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTranslateAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-translate");
     assertNotNull(layer);
 
@@ -3628,7 +3788,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTranslateAnchorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-translate-anchor");
     assertNotNull(layer);
 
@@ -3639,7 +3800,8 @@ public class SymbolLayerTest extends BaseStyleTest {
 
   @Test
   public void testTextTranslateAnchorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("text-translate-anchor");
     assertNotNull(layer);
 
@@ -3663,8 +3825,4 @@ public class SymbolLayerTest extends BaseStyleTest {
   }
 
 
-  @After
-  public void unregisterIntentServiceIdlingResource() {
-    Espresso.unregisterIdlingResources(idlingResource);
-  }
 }

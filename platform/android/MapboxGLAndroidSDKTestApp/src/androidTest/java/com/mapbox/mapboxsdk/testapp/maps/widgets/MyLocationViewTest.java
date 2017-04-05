@@ -20,6 +20,7 @@ import com.mapbox.mapboxsdk.location.LocationSource;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.widgets.MyLocationView;
 import com.mapbox.mapboxsdk.testapp.R;
+import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 import com.mapbox.mapboxsdk.testapp.activity.espresso.EspressoTestActivity;
 import com.mapbox.mapboxsdk.testapp.utils.OnMapReadyIdlingResource;
 import com.mapbox.mapboxsdk.testapp.utils.ViewUtils;
@@ -49,24 +50,17 @@ import static org.hamcrest.Matchers.not;
  * {@link com.mapbox.mapboxsdk.maps.TrackingSettings#setMyBearingTrackingMode(int)}.
  * </p>
  */
-public class MyLocationViewTest {
+public class MyLocationViewTest extends BaseActivityTest{
 
-  @Rule
-  public final ActivityTestRule<EspressoTestActivity> rule = new ActivityTestRule<>(EspressoTestActivity.class);
-
-  private OnMapReadyIdlingResource idlingResource;
-
-  @Before
-  public void beforeTest() {
-    idlingResource = new OnMapReadyIdlingResource(rule.getActivity());
-    Espresso.registerIdlingResources(idlingResource);
+  @Override
+  protected Class getActivityClass() {
+    return EspressoTestActivity.class;
   }
 
   @Test
   @Ignore // requires runtime permissions, disabled for CI
   public void testEnabled() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
-    MapboxMap mapboxMap = rule.getActivity().getMapboxMap();
+   validateTestSetup();
     onView(withId(R.id.userLocationView)).check(matches(not(isDisplayed())));
     onView(withId(R.id.mapView)).perform(new ToggleLocationAction(mapboxMap, true));
     onView(withId(R.id.userLocationView)).check(matches(isDisplayed()));
@@ -79,8 +73,7 @@ public class MyLocationViewTest {
   // requires runtime permissions, disabled for CI + issue with android.support.test.espresso.AppNotIdleException:
   // Looped for 5049 iterations over 60 SECONDS.
   public void testTracking() {
-    ViewUtils.checkViewIsDisplayed(R.id.mapView);
-    MapboxMap mapboxMap = rule.getActivity().getMapboxMap();
+   validateTestSetup();
     onView(withId(R.id.userLocationView)).check(matches(not(isDisplayed())));
     onView(withId(R.id.mapView)).perform(new EnableLocationTrackingAction(mapboxMap));
     onView(withId(R.id.userLocationView)).check(matches(isDisplayed()));
@@ -89,11 +82,6 @@ public class MyLocationViewTest {
     onView(withId(R.id.mapView)).perform(new EnableCompassBearingTrackingAction(mapboxMap));
     onView(withId(R.id.userLocationView)).check(matches(new DrawableMatcher(mapboxMap,
       R.drawable.mapbox_mylocation_icon_bearing, true)));
-  }
-
-  @After
-  public void afterTest() {
-    Espresso.unregisterIdlingResources(idlingResource);
   }
 
   private class ToggleLocationAction implements ViewAction {

@@ -1,17 +1,28 @@
 package com.mapbox.mapboxsdk.testapp.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResourceTimeoutException;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.rule.ActivityTestRule;
+import android.view.View;
 
 import timber.log.Timber;
 
+import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.testapp.R;
 import com.mapbox.mapboxsdk.testapp.utils.OnMapReadyIdlingResource;
 import com.mapbox.mapboxsdk.testapp.utils.ScreenshotUtil;
+import com.mapbox.mapboxsdk.testapp.utils.TestConstants;
 
+import junit.framework.Assert;
+
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -46,11 +57,25 @@ public abstract class BaseActivityTest {
     }
   }
 
+  protected void validateTestSetup(){
+    checkViewIsDisplayed(R.id.mapView);
+    Assert.assertTrue("Device is not connected to the Internet.", isConnected(rule.getActivity()));
+    Assert.assertNotNull(mapboxMap);
+  }
+
+  protected MapboxMap getMapboxMap() {
+    return mapboxMap;
+  }
+
   protected abstract Class getActivityClass();
 
   protected void checkViewIsDisplayed(int id) {
     onView(withId(id))
       .check(matches(isDisplayed()));
+  }
+
+  protected void waitLoop(){
+    onView(withId(R.id.mapView)).perform(new LoopAction(100));
   }
 
   protected void takeScreenshot(final String name) {
@@ -63,10 +88,41 @@ public abstract class BaseActivityTest {
     });
   }
 
+  static boolean isConnected(Context context) {
+    ConnectivityManager connectivityManager
+      = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+  }
+
   @After
   public void afterTest() {
     Timber.e("@After test: unregister idle resource");
     Espresso.unregisterIdlingResources(idlingResource);
+  }
+
+  private class LoopAction implements ViewAction {
+
+    private long loopTime;
+
+    public LoopAction(long loopTime) {
+      this.loopTime = loopTime;
+    }
+
+    @Override
+    public Matcher<View> getConstraints() {
+      return isDisplayed();
+    }
+
+    @Override
+    public String getDescription() {
+      return getClass().getSimpleName();
+    }
+
+    @Override
+    public void perform(UiController uiController, View view) {
+      uiController.loopMainThreadForAtLeast(loopTime);
+    }
   }
 }
 

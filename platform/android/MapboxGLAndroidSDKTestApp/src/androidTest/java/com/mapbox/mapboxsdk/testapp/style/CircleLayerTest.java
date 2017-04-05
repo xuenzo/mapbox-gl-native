@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.testapp.R;
 import com.mapbox.mapboxsdk.testapp.activity.style.RuntimeStyleTestActivity;
 import com.mapbox.mapboxsdk.testapp.utils.OnMapReadyIdlingResource;
+import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,28 +38,22 @@ import static com.mapbox.mapboxsdk.style.layers.Property.*;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
 
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
+import com.mapbox.mapboxsdk.testapp.activity.espresso.EspressoTestActivity;
 
 /**
  * Basic smoke tests for CircleLayer
  */
 @RunWith(AndroidJUnit4.class)
-public class CircleLayerTest extends BaseStyleTest {
-
-  @Rule
-  public final ActivityTestRule<RuntimeStyleTestActivity> rule = new ActivityTestRule<>(RuntimeStyleTestActivity.class);
+public class CircleLayerTest extends BaseActivityTest {
 
   private CircleLayer layer;
 
-  private OnMapReadyIdlingResource idlingResource;
+  @Override
+  protected Class getActivityClass() {
+    return EspressoTestActivity.class;
+  }
 
-  private MapboxMap mapboxMap;
-
-  @Before
-  public void setup() {
-    idlingResource = new OnMapReadyIdlingResource(rule.getActivity());
-    Espresso.registerIdlingResources(idlingResource);
-    mapboxMap = rule.getActivity().getMapboxMap();
-
+  private void setupLayer(){
     if ((layer = mapboxMap.getLayerAs("my-layer")) == null) {
       Timber.i("Adding layer");
       layer = new CircleLayer("my-layer", "composite");
@@ -71,7 +66,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testSetVisibility() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("Visibility");
     assertNotNull(layer);
 
@@ -85,7 +81,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleRadiusTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-radiusTransitionOptions");
     assertNotNull(layer);
 
@@ -97,7 +94,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleRadiusAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-radius");
     assertNotNull(layer);
 
@@ -108,7 +106,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleRadiusAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-radius");
     assertNotNull(layer);
 
@@ -134,7 +133,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleRadiusAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-radius");
     assertNotNull(layer);
 
@@ -153,7 +153,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleRadiusAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-radius");
     assertNotNull(layer);
 
@@ -179,7 +180,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleRadiusAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-radius");
     assertNotNull(layer);
 
@@ -208,7 +210,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleRadiusAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-radius");
     assertNotNull(layer);
 
@@ -242,7 +245,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleColorTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-colorTransitionOptions");
     assertNotNull(layer);
 
@@ -254,7 +258,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleColorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-color");
     assertNotNull(layer);
 
@@ -265,7 +270,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleColorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-color");
     assertNotNull(layer);
 
@@ -291,7 +297,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleColorAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-color");
     assertNotNull(layer);
 
@@ -310,7 +317,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleColorAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-color");
     assertNotNull(layer);
 
@@ -336,7 +344,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleColorAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-color");
     assertNotNull(layer);
 
@@ -365,7 +374,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleColorAsIntConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-color");
     assertNotNull(layer);
 
@@ -376,7 +386,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleBlurTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-blurTransitionOptions");
     assertNotNull(layer);
 
@@ -388,7 +399,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleBlurAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-blur");
     assertNotNull(layer);
 
@@ -399,7 +411,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleBlurAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-blur");
     assertNotNull(layer);
 
@@ -425,7 +438,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleBlurAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-blur");
     assertNotNull(layer);
 
@@ -444,7 +458,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleBlurAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-blur");
     assertNotNull(layer);
 
@@ -470,7 +485,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleBlurAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-blur");
     assertNotNull(layer);
 
@@ -499,7 +515,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleBlurAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-blur");
     assertNotNull(layer);
 
@@ -533,7 +550,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleOpacityTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-opacityTransitionOptions");
     assertNotNull(layer);
 
@@ -545,7 +563,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleOpacityAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-opacity");
     assertNotNull(layer);
 
@@ -556,7 +575,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleOpacityAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-opacity");
     assertNotNull(layer);
 
@@ -582,7 +602,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleOpacityAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-opacity");
     assertNotNull(layer);
 
@@ -601,7 +622,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleOpacityAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-opacity");
     assertNotNull(layer);
 
@@ -627,7 +649,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleOpacityAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-opacity");
     assertNotNull(layer);
 
@@ -656,7 +679,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleOpacityAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-opacity");
     assertNotNull(layer);
 
@@ -690,7 +714,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleTranslateTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-translateTransitionOptions");
     assertNotNull(layer);
 
@@ -702,7 +727,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleTranslateAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-translate");
     assertNotNull(layer);
 
@@ -713,7 +739,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleTranslateAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-translate");
     assertNotNull(layer);
 
@@ -740,7 +767,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleTranslateAnchorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-translate-anchor");
     assertNotNull(layer);
 
@@ -751,7 +779,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleTranslateAnchorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-translate-anchor");
     assertNotNull(layer);
 
@@ -777,7 +806,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCirclePitchScaleAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-pitch-scale");
     assertNotNull(layer);
 
@@ -788,7 +818,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCirclePitchScaleAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-pitch-scale");
     assertNotNull(layer);
 
@@ -813,7 +844,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeWidthTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-widthTransitionOptions");
     assertNotNull(layer);
 
@@ -825,7 +857,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeWidthAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-width");
     assertNotNull(layer);
 
@@ -836,7 +869,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeWidthAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-width");
     assertNotNull(layer);
 
@@ -862,7 +896,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeWidthAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-width");
     assertNotNull(layer);
 
@@ -881,7 +916,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeWidthAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-width");
     assertNotNull(layer);
 
@@ -907,7 +943,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeWidthAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-width");
     assertNotNull(layer);
 
@@ -936,7 +973,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeWidthAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-width");
     assertNotNull(layer);
 
@@ -970,7 +1008,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeColorTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-colorTransitionOptions");
     assertNotNull(layer);
 
@@ -982,7 +1021,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeColorAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-color");
     assertNotNull(layer);
 
@@ -993,7 +1033,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeColorAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-color");
     assertNotNull(layer);
 
@@ -1019,7 +1060,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeColorAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-color");
     assertNotNull(layer);
 
@@ -1038,7 +1080,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeColorAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-color");
     assertNotNull(layer);
 
@@ -1064,7 +1107,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeColorAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-color");
     assertNotNull(layer);
 
@@ -1093,7 +1137,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeColorAsIntConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-color");
     assertNotNull(layer);
 
@@ -1104,7 +1149,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeOpacityTransition() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-opacityTransitionOptions");
     assertNotNull(layer);
 
@@ -1116,7 +1162,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeOpacityAsConstant() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-opacity");
     assertNotNull(layer);
 
@@ -1127,7 +1174,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeOpacityAsCameraFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-opacity");
     assertNotNull(layer);
 
@@ -1153,7 +1201,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeOpacityAsIdentitySourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-opacity");
     assertNotNull(layer);
 
@@ -1172,7 +1221,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeOpacityAsExponentialSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-opacity");
     assertNotNull(layer);
 
@@ -1198,7 +1248,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeOpacityAsCategoricalSourceFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-opacity");
     assertNotNull(layer);
 
@@ -1227,7 +1278,8 @@ public class CircleLayerTest extends BaseStyleTest {
 
   @Test
   public void testCircleStrokeOpacityAsCompositeFunction() {
-    checkViewIsDisplayed(R.id.mapView);
+    validateTestSetup();
+    setupLayer();
     Timber.i("circle-stroke-opacity");
     assertNotNull(layer);
 
@@ -1260,8 +1312,4 @@ public class CircleLayerTest extends BaseStyleTest {
   }
 
 
-  @After
-  public void unregisterIntentServiceIdlingResource() {
-    Espresso.unregisterIdlingResources(idlingResource);
-  }
 }
