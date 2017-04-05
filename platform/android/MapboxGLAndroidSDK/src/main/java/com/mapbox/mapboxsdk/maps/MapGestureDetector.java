@@ -22,6 +22,10 @@ import com.mapbox.services.android.telemetry.MapboxTelemetry;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
 import com.mapbox.services.android.telemetry.utils.TelemetryUtils;
 
+import timber.log.Timber;
+
+import static com.mapbox.mapboxsdk.maps.MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE;
+
 /**
  * Manages gestures events on a MapView.
  * <p>
@@ -35,6 +39,7 @@ final class MapGestureDetector {
   private final UiSettings uiSettings;
   private final TrackingSettings trackingSettings;
   private final AnnotationManager annotationManager;
+  private final CameraChangeDispatcher cameraChangeDispatcher;
 
   private final GestureDetectorCompat gestureDetector;
   private final ScaleGestureDetector scaleGestureDetector;
@@ -56,12 +61,14 @@ final class MapGestureDetector {
   private boolean scaleGestureOccurred = false;
 
   MapGestureDetector(Context context, Transform transform, Projection projection, UiSettings uiSettings,
-                     TrackingSettings trackingSettings, AnnotationManager annotationManager) {
+                     TrackingSettings trackingSettings, AnnotationManager annotationManager,
+                     CameraChangeDispatcher cameraChangeDispatcher) {
     this.annotationManager = annotationManager;
     this.transform = transform;
     this.projection = projection;
     this.uiSettings = uiSettings;
     this.trackingSettings = trackingSettings;
+    this.cameraChangeDispatcher = cameraChangeDispatcher;
 
     // Touch gesture detectors
     gestureDetector = new GestureDetectorCompat(context, new GestureListener());
@@ -187,6 +194,7 @@ final class MapGestureDetector {
           MapboxTelemetry.getInstance().pushEvent(MapboxEvent.buildMapDragEndEvent(
             getLocationFromGesture(event.getX(), event.getY()), transform.getZoom()));
           scrollInProgress = false;
+          cameraChangeDispatcher.onCameraIdle();
         }
 
         twoTap = false;
@@ -272,6 +280,9 @@ final class MapGestureDetector {
             quickZoom = false;
             break;
           }
+
+          // notify camera change listener
+          cameraChangeDispatcher.onCameraMoveStarted(REASON_API_GESTURE);
 
           // Single finger double tap
           if (focalPoint != null) {
@@ -362,9 +373,7 @@ final class MapGestureDetector {
       long animationTime = (long) (velocityXY / 7 / tiltFactor + MapboxConstants.ANIMATION_DURATION_FLING_BASE);
 
       // update transformation
-      transform.setGestureInProgress(true);
       transform.moveBy(offsetX, offsetY, animationTime);
-      transform.setGestureInProgress(false);
 
       if (onFlingListener != null) {
         onFlingListener.onFling();
@@ -377,6 +386,9 @@ final class MapGestureDetector {
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
       if (!scrollInProgress) {
         scrollInProgress = true;
+        // Cancel any animation
+        transform.cancelTransitions();
+        cameraChangeDispatcher.onCameraMoveStarted(REASON_API_GESTURE);
         MapboxTelemetry.getInstance().pushEvent(MapboxEvent.buildMapClickEvent(
           getLocationFromGesture(e1.getX(), e1.getY()),
           MapboxEvent.GESTURE_PAN_START, transform.getZoom()));
@@ -391,11 +403,12 @@ final class MapGestureDetector {
 
       // reset tracking if needed
       trackingSettings.resetTrackingModesIfRequired(true, false);
-      // Cancel any animation
-      transform.cancelTransitions();
+
+
 
       // Scroll the map
       transform.moveBy(-distanceX, -distanceY, 0 /*no duration*/);
+
 
       if (onScrollListener != null) {
         onScrollListener.onScroll();
@@ -446,6 +459,8 @@ final class MapGestureDetector {
       // If scale is large enough ignore a tap
       scaleFactor *= detector.getScaleFactor();
       if ((scaleFactor > 1.05f) || (scaleFactor < 0.95f)) {
+        // notify camera change listener
+        cameraChangeDispatcher.onCameraMoveStarted(REASON_API_GESTURE);
         zoomStarted = true;
       }
 
@@ -466,7 +481,7 @@ final class MapGestureDetector {
       }
 
       // Cancel any animation
-      transform.cancelTransitions();
+      //transform.cancelTransitions();
 
       // Gesture is a quickzoom if there aren't two fingers
       quickZoom = !twoTap;
@@ -512,6 +527,9 @@ final class MapGestureDetector {
         return false;
       }
 
+      // notify camera change listener
+      cameraChangeDispatcher.onCameraMoveStarted(REASON_API_GESTURE);
+
       beginTime = detector.getEventTime();
       MapboxTelemetry.getInstance().pushEvent(MapboxEvent.buildMapClickEvent(
         getLocationFromGesture(detector.getFocusX(), detector.getFocusY()),
@@ -522,6 +540,7 @@ final class MapGestureDetector {
     // Called when the fingers leave the screen
     @Override
     public void onRotateEnd(RotateGestureDetector detector) {
+      // notify camera change listener
       beginTime = 0;
       totalAngle = 0.0f;
       started = false;
@@ -553,13 +572,8 @@ final class MapGestureDetector {
       if (!started) {
         return false;
       }
-
-      // Cancel any animation
-      transform.cancelTransitions();
-
       // rotation constitutes translation of anything except the center of
       // rotation, so cancel both location and bearing tracking if required
-
       trackingSettings.resetTrackingModesIfRequired(true, true);
 
       // Get rotate value
@@ -593,6 +607,8 @@ final class MapGestureDetector {
         return false;
       }
 
+      // notify camera change listener
+      cameraChangeDispatcher.onCameraMoveStarted(REASON_API_GESTURE);
       beginTime = detector.getEventTime();
       MapboxTelemetry.getInstance().pushEvent(MapboxEvent.buildMapClickEvent(
         getLocationFromGesture(detector.getFocusX(), detector.getFocusY()),
@@ -634,7 +650,7 @@ final class MapGestureDetector {
       }
 
       // Cancel any animation
-      transform.cancelTransitions();
+      //transform.cancelTransitions();
 
       // Get tilt value (scale and clamp)
       double pitch = transform.getTilt();
