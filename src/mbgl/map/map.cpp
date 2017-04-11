@@ -616,8 +616,8 @@ CameraOptions Map::cameraForLatLngs(const std::vector<LatLng>& latLngs, const Ed
     if (width > 0 || height > 0) {
         double scaleX = double(getSize().width) / width;
         double scaleY = double(getSize().height) / height;
-        scaleX -= (padding.left + padding.right) / width;
-        scaleY -= (padding.top + padding.bottom) / height;
+        scaleX -= (padding.left() + padding.right()) / width;
+        scaleY -= (padding.top() + padding.bottom()) / height;
         minScale = util::min(scaleX, scaleY);
     }
     double zoom = util::log2(getScale() * minScale);
@@ -626,12 +626,12 @@ CameraOptions Map::cameraForLatLngs(const std::vector<LatLng>& latLngs, const Ed
     // Calculate the center point of a virtual bounds that is extended in all directions by padding.
     ScreenCoordinate centerPixel = nePixel + swPixel;
     ScreenCoordinate paddedNEPixel = {
-        padding.right / minScale,
-        padding.top / minScale,
+        padding.right() / minScale,
+        padding.top() / minScale,
     };
     ScreenCoordinate paddedSWPixel = {
-        padding.left / minScale,
-        padding.bottom / minScale,
+        padding.left() / minScale,
+        padding.bottom() / minScale,
     };
     centerPixel = centerPixel + paddedNEPixel - paddedSWPixel;
     centerPixel /= 2.0;
