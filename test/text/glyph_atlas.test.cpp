@@ -167,12 +167,12 @@ TEST(GlyphAtlas, InvalidSDFGlyph) {
     auto& glyphSet = test.glyphAtlas.getGlyphSet(fontStack);
     glyphSet.emplace(66, SDFGlyph{ 66 /* ASCII 'B' */,
                                   AlphaImage({7, 7}), /* correct */
-                                  { 1 /* width */, 1 /* height */, 0 /* left */, 0 /* top */,
-                                    0 /* advance */ } });
+                                  { { 1 /* width */, 1 /* height */, 0 /* left */, 0 /* top */,
+                                    0 /* advance */ } } });
     glyphSet.emplace(67, SDFGlyph{ 67 /* ASCII 'C' */,
                                   AlphaImage({518, 8}), /* correct */
-                                  { 512 /* width */, 2 /* height */, 0 /* left */, 0 /* top */,
-                                    0 /* advance */ } });
+                                  { { 512 /* width */, 2 /* height */, 0 /* left */, 0 /* top */,
+                                    0 /* advance */ } } });
 
     GlyphDependencies glyphDependencies = {{fontStack, {'A','B','C'}}};
     test.addGlyphs(test, glyphDependencies);
@@ -187,10 +187,9 @@ TEST(GlyphAtlas, InvalidSDFGlyph) {
     ASSERT_NE(positions.end(), positions.find(66));
     // Width is 12 because actual dimensions are 1+6 pixels, with 1px border added, rounded up to
     // the next multiple of 4.
-    ASSERT_EQ((Rect<uint16_t>{ 0, 0, 12, 12 }), positions[66].rect);
+    ASSERT_EQ((Rect<uint16_t>{ 0, 0, 12, 12 }), positions[66]->rect);
 
     // 'C' was not placed because the width is too big.
     ASSERT_NE(positions.end(), positions.find(67));
-    ASSERT_EQ((Rect<uint16_t>{ 0, 0, 0, 0 }), positions[67].rect);
-
+    ASSERT_EQ((Rect<uint16_t>{ 0, 0, 0, 0 }), positions[67]->rect);
 }

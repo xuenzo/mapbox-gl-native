@@ -303,18 +303,16 @@ SymbolQuads getGlyphQuads(Anchor& anchor,
 
     for (const PositionedGlyph &positionedGlyph: shapedText.positionedGlyphs) {
         auto face_it = face.find(positionedGlyph.glyph);
-        if (face_it == face.end())
+        if (face_it == face.end() || !face_it->second)
             continue;
-        const Glyph &glyph = face_it->second;
+        const Glyph &glyph = *face_it->second;
         const Rect<uint16_t> &rect = glyph.rect;
-
-        if (!glyph)
-            continue;
 
         if (!rect.hasArea())
             continue;
 
-        const float centerX = (positionedGlyph.x + glyph.metrics.advance / 2.0f) * boxScale;
+        const GlyphMetrics& metrics = glyph.metrics.value_or(GlyphMetrics {});
+        const float centerX = (positionedGlyph.x + metrics.advance / 2.0f) * boxScale;
 
         GlyphInstances glyphInstances;
         if (placement == style::SymbolPlacementType::Line) {
@@ -329,12 +327,12 @@ SymbolQuads getGlyphQuads(Anchor& anchor,
         const float glyphPadding = 1.0f;
         const float rectBuffer = 3.0f + glyphPadding;
 
-        const float x1 = positionedGlyph.x + glyph.metrics.left - rectBuffer;
-        const float y1 = positionedGlyph.y - glyph.metrics.top - rectBuffer;
+        const float x1 = positionedGlyph.x + metrics.left - rectBuffer;
+        const float y1 = positionedGlyph.y - metrics.top - rectBuffer;
         const float x2 = x1 + rect.w;
         const float y2 = y1 + rect.h;
 
-        const Point<float> center{positionedGlyph.x, static_cast<float>(static_cast<float>(glyph.metrics.advance) / 2.0)};
+        const Point<float> center{positionedGlyph.x, metrics.advance / 2.0f};
 
         Point<float> otl{x1, y1};
         Point<float> otr{x2, y1};

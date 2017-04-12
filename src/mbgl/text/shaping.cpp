@@ -56,8 +56,8 @@ void justifyLine(std::vector<PositionedGlyph>& positionedGlyphs,
     
     PositionedGlyph& glyph = positionedGlyphs[end];
     auto it = glyphs.find(glyph.glyph);
-    if (it != glyphs.end()) {
-        const uint32_t lastAdvance = it->second.metrics.advance;
+    if (it != glyphs.end() && it->second) {
+        const uint32_t lastAdvance = it->second->metrics? it->second->metrics->advance : 0;
         const float lineIndent = float(glyph.x + lastAdvance) * justify;
         
         for (std::size_t j = start; j <= end; j++) {
@@ -74,8 +74,9 @@ float determineAverageLineWidth(const std::u16string& logicalInput,
     
     for (char16_t chr : logicalInput) {
         auto it = glyphs.find(chr);
-        if (it != glyphs.end()) {
-            totalWidth += it->second.metrics.advance + spacing;
+        if (it != glyphs.end() && it->second) {
+            const uint32_t lastAdvance = it->second->metrics? it->second->metrics->advance : 0;
+            totalWidth += lastAdvance + spacing;
         }
     }
     
@@ -185,8 +186,9 @@ std::set<std::size_t> determineLineBreaks(const std::u16string& logicalInput,
     for (std::size_t i = 0; i < logicalInput.size(); i++) {
         const char16_t codePoint = logicalInput[i];
         auto it = glyphs.find(codePoint);
-        if (it != glyphs.end() && !boost::algorithm::is_any_of(u" \t\n\v\f\r")(codePoint)) {
-            currentX += it->second.metrics.advance + spacing;
+        if (it != glyphs.end() && it->second && !boost::algorithm::is_any_of(u" \t\n\v\f\r")(codePoint)) {
+            const uint32_t lastAdvance = it->second->metrics? it->second->metrics->advance : 0;
+            currentX += lastAdvance + spacing;
         }
         
         // Ideographic characters, spaces, and word-breaking punctuation that often appear without
@@ -234,15 +236,16 @@ void shapeLines(Shaping& shaping,
         std::size_t lineStartIndex = shaping.positionedGlyphs.size();
         for (char16_t chr : line) {
             auto it = glyphs.find(chr);
-            if (it == glyphs.end()) {
+            if (it == glyphs.end() || !it->second) {
                 continue;
             }
             
-            const Glyph& glyph = it->second;
+            const Glyph& glyph = *it->second;
             
             if (writingMode == WritingModeType::Horizontal || !util::i18n::hasUprightVerticalOrientation(chr)) {
                 shaping.positionedGlyphs.emplace_back(chr, x, y, 0);
-                x += glyph.metrics.advance + spacing;
+                const uint32_t advance = glyph.metrics ? glyph.metrics->advance : 0;
+                x += advance + spacing;
             } else {
                 shaping.positionedGlyphs.emplace_back(chr, x, 0, -M_PI_2);
                 x += verticalHeight + spacing;

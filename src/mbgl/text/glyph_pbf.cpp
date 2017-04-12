@@ -21,6 +21,7 @@ std::vector<SDFGlyph> parseGlyphPBF(const GlyphRange& glyphRange, const std::str
             bool hasID = false, hasWidth = false, hasHeight = false, hasLeft = false,
                  hasTop = false, hasAdvance = false;
 
+            GlyphMetrics metrics;
             while (glyph_pbf.next()) {
                 switch (glyph_pbf.tag()) {
                 case 1: // id
@@ -31,23 +32,23 @@ std::vector<SDFGlyph> parseGlyphPBF(const GlyphRange& glyphRange, const std::str
                     glyphData = glyph_pbf.get_view();
                     break;
                 case 3: // width
-                    glyph.metrics.width = glyph_pbf.get_uint32();
+                    metrics.width = glyph_pbf.get_uint32();
                     hasWidth = true;
                     break;
                 case 4: // height
-                    glyph.metrics.height = glyph_pbf.get_uint32();
+                    metrics.height = glyph_pbf.get_uint32();
                     hasHeight = true;
                     break;
                 case 5: // left
-                    glyph.metrics.left = glyph_pbf.get_sint32();
+                    metrics.left = glyph_pbf.get_sint32();
                     hasLeft = true;
                     break;
                 case 6: // top
-                    glyph.metrics.top = glyph_pbf.get_sint32();
+                    metrics.top = glyph_pbf.get_sint32();
                     hasTop = true;
                     break;
                 case 7: // advance
-                    glyph.metrics.advance = glyph_pbf.get_uint32();
+                    metrics.advance = glyph_pbf.get_uint32();
                     hasAdvance = true;
                     break;
                 default:
@@ -61,20 +62,20 @@ std::vector<SDFGlyph> parseGlyphPBF(const GlyphRange& glyphRange, const std::str
             // All other glyphs are malformed.  We're also discarding all glyphs that are outside
             // the expected glyph range.
             if (!hasID || !hasWidth || !hasHeight || !hasLeft || !hasTop || !hasAdvance ||
-                glyph.metrics.width >= 256 || glyph.metrics.height >= 256 ||
-                glyph.metrics.left < -128 || glyph.metrics.left >= 128 ||
-                glyph.metrics.top < -128 || glyph.metrics.top >= 128 ||
-                glyph.metrics.advance >= 256 ||
+                metrics.width >= 256 || metrics.height >= 256 ||
+                metrics.left < -128 || metrics.left >= 128 ||
+                metrics.top < -128 || metrics.top >= 128 ||
+                metrics.advance >= 256 ||
                 glyph.id < glyphRange.first || glyph.id > glyphRange.second) {
                 continue;
             }
 
             // If the area of width/height is non-zero, we need to adjust the expected size
             // with the implicit border size, otherwise we expect there to be no bitmap at all.
-            if (glyph.metrics.width && glyph.metrics.height) {
+            if (metrics.width && metrics.height) {
                 const Size size {
-                    glyph.metrics.width + 2 * SDFGlyph::borderSize,
-                    glyph.metrics.height + 2 * SDFGlyph::borderSize
+                    metrics.width + 2 * SDFGlyph::borderSize,
+                    metrics.height + 2 * SDFGlyph::borderSize
                 };
 
                 if (size.area() != glyphData.size()) {
@@ -82,6 +83,11 @@ std::vector<SDFGlyph> parseGlyphPBF(const GlyphRange& glyphRange, const std::str
                 }
 
                 glyph.bitmap = AlphaImage(size, reinterpret_cast<const uint8_t*>(glyphData.data()), glyphData.size());
+            }
+
+            // Provide glyph metrics only when these are valid.
+            if (!(metrics.width == 0 && metrics.height == 0 && metrics.advance == 0)) {
+                glyph.metrics = std::move(metrics);
             }
 
             result.push_back(std::move(glyph));

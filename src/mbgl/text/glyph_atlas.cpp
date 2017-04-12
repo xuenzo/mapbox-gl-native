@@ -183,9 +183,13 @@ void GlyphAtlas::addGlyphs(GlyphRequestor& requestor, const GlyphDependencies& g
                 ? Rect<uint16_t>(0,0,0,0)
                 : glyphRect->second.rect;
 
+            optional<Glyph> glyph;
+            if (it->second.metrics || rect.hasArea()) {
+                glyph.emplace(Glyph { rect, it->second.metrics });
+            }
             positions.emplace(std::piecewise_construct,
                               std::forward_as_tuple(glyphID),
-                              std::forward_as_tuple(rect, it->second.metrics));
+                              std::forward_as_tuple(std::move(glyph)));
         }
     }
 
@@ -208,8 +212,9 @@ void GlyphAtlas::addGlyph(GlyphRequestor& requestor,
 
     // Guard against glyphs that are too large, or that we don't need to place into the atlas since
     // they don't have any pixels.
-    if (glyph.metrics.width == 0 || glyph.metrics.width >= 256 ||
-        glyph.metrics.height == 0 || glyph.metrics.height >= 256) {
+    if (!glyph.metrics ||
+        glyph.metrics->width == 0 || glyph.metrics->width >= 256 ||
+        glyph.metrics->height == 0 || glyph.metrics->height >= 256) {
         return;
     }
 

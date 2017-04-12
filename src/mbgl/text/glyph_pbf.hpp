@@ -21,7 +21,7 @@ public:
     AlphaImage bitmap;
 
     // Glyph metrics
-    GlyphMetrics metrics;
+    optional<GlyphMetrics> metrics;
 };
 
 std::vector<SDFGlyph> parseGlyphPBF(const GlyphRange&, const std::string& data);

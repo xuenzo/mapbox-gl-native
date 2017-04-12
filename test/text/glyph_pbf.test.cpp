@@ -15,9 +15,10 @@ TEST(GlyphPBF, Parsing) {
     AlphaImage expected({7, 7});
     expected.fill('x');
     EXPECT_EQ(expected, sdf.bitmap);
-    EXPECT_EQ(1u, sdf.metrics.width);
-    EXPECT_EQ(1u, sdf.metrics.height);
-    EXPECT_EQ(20, sdf.metrics.left);
-    EXPECT_EQ(2, sdf.metrics.top);
-    EXPECT_EQ(8u, sdf.metrics.advance);
+    EXPECT_TRUE(sdf.metrics);
+    EXPECT_EQ(1u, sdf.metrics->width);
+    EXPECT_EQ(1u, sdf.metrics->height);
+    EXPECT_EQ(20, sdf.metrics->left);
+    EXPECT_EQ(2, sdf.metrics->top);
+    EXPECT_EQ(8u, sdf.metrics->advance);
 }

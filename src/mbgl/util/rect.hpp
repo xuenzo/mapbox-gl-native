@@ -4,10 +4,8 @@ namespace mbgl {
 
 template <typename T>
 struct Rect {
-    Rect() = default;
-    Rect(T x_, T y_, T w_, T h_) : x(x_), y(y_), w(w_), h(h_) {}
-    T x = 0, y = 0;
-    T w = 0, h = 0;
+    Rect(T x_ = 0, T y_ = 0, T w_ = 0, T h_ = 0) : x(x_), y(y_), w(w_), h(h_) {}
+    T x, y, w, h;
 
     template <typename Number>
     Rect operator *(Number value) const {

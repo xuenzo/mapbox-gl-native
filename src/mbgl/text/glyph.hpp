@@ -2,6 +2,7 @@
 
 #include <mbgl/text/glyph_range.hpp>
 #include <mbgl/util/font_stack.hpp>
+#include <mbgl/util/optional.hpp>
 #include <mbgl/util/rect.hpp>
 #include <mbgl/util/traits.hpp>
 
@@ -19,17 +20,11 @@ typedef std::set<GlyphID> GlyphIDs;
 GlyphRange getGlyphRange(GlyphID glyph);
 
 struct GlyphMetrics {
-    explicit operator bool() const {
-        return !(width == 0 && height == 0 && advance == 0);
-    }
-
-    // Glyph metrics.
     uint32_t width = 0;
     uint32_t height = 0;
     int32_t left = 0;
     int32_t top = 0;
     uint32_t advance = 0;
-
 };
 
 inline bool operator==(const GlyphMetrics& lhs, const GlyphMetrics& rhs) {
@@ -41,19 +36,15 @@ inline bool operator==(const GlyphMetrics& lhs, const GlyphMetrics& rhs) {
 }
 
 struct Glyph {
-    explicit Glyph() : rect(0, 0, 0, 0), metrics() {}
-    explicit Glyph(Rect<uint16_t> rect_, GlyphMetrics metrics_)
+    explicit Glyph() = default;
+    explicit Glyph(Rect<uint16_t> rect_, optional<GlyphMetrics> metrics_)
         : rect(std::move(rect_)), metrics(std::move(metrics_)) {}
 
-    explicit operator bool() const {
-        return metrics || rect.hasArea();
-    }
-
     const Rect<uint16_t> rect;
-    const GlyphMetrics metrics;
+    optional<GlyphMetrics> metrics;
 };
 
-typedef std::map<GlyphID, Glyph> GlyphPositions;
+using GlyphPositions = std::map<GlyphID, optional<Glyph>>;
 
 class PositionedGlyph {
 public:
