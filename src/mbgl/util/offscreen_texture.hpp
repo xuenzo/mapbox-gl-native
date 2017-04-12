@@ -12,11 +12,11 @@ class Texture;
 
 class OffscreenTexture : public View {
 public:
-    OffscreenTexture(gl::Context&, Size size = { 256, 256 }, gl::TextureUnit unit = 0);
+    OffscreenTexture(gl::Context&, Size size = { 256, 256 });
     ~OffscreenTexture();
 
     void bind() override;
-    void bindRenderbuffers();
+    void bindRenderbuffers(gl::TextureUnit unit = 0);
 
     PremultipliedImage readStillImage();
 

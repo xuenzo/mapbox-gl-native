@@ -8,21 +8,20 @@ namespace mbgl {
 
 class OffscreenTexture::Impl {
 public:
-    Impl(gl::Context& context_, const Size size_, gl::TextureUnit unit_)
+    Impl(gl::Context& context_, const Size size_)
         : context(context_), size(std::move(size_)) {
-        unit = unit_;
         assert(size);
     }
 
     void bind() {
         if (!framebuffer) {
-            texture = context.createTexture(size, gl::TextureFormat::RGBA, unit);
+            texture = context.createTexture(size, gl::TextureFormat::RGBA);
             framebuffer = context.createFramebuffer(*texture);
         } else {
             context.bindFramebuffer = framebuffer->framebuffer;
         }
 
-        context.activeTexture = unit;
+        context.activeTexture = 0;
         context.viewport = { 0, 0, size };
     }
 
@@ -39,31 +38,29 @@ public:
         return size;
     }
 
-    void bindRenderbuffers() {
+    void bindRenderbuffers(gl::TextureUnit unit) {
         if (!framebuffer) {
             texture = context.createTexture(size, gl::TextureFormat::RGBA, unit);
-            colorTarget = context.createRenderbuffer<gl::RenderbufferType::RGBA4>(size);
             depthTarget = context.createRenderbuffer<gl::RenderbufferType::DepthComponent>(size);
-            framebuffer = context.createFramebuffer(*colorTarget, *depthTarget, *texture);
+            framebuffer = context.createFramebuffer(*depthTarget, *texture);
         } else {
             context.bindFramebuffer = framebuffer->framebuffer;
         }
 
+        context.activeTexture = unit;
         context.viewport = { 0, 0, size };
     }
 
 private:
     gl::Context& context;
     const Size size;
-    gl::TextureUnit unit;
     optional<gl::Framebuffer> framebuffer;
     optional<gl::Texture> texture;
-    optional<gl::Renderbuffer<gl::RenderbufferType::RGBA4>> colorTarget;
     optional<gl::Renderbuffer<gl::RenderbufferType::DepthComponent>> depthTarget;
 };
 
-OffscreenTexture::OffscreenTexture(gl::Context& context, const Size size, gl::TextureUnit unit)
-    : impl(std::make_unique<Impl>(context, std::move(size), unit)) {
+OffscreenTexture::OffscreenTexture(gl::Context& context, const Size size)
+    : impl(std::make_unique<Impl>(context, std::move(size))) {
     assert(size);
 }
 
@@ -85,8 +82,8 @@ const Size& OffscreenTexture::getSize() const {
     return impl->getSize();
 }
 
-void OffscreenTexture::bindRenderbuffers() {
-    impl->bindRenderbuffers();
+void OffscreenTexture::bindRenderbuffers(gl::TextureUnit unit) {
+    impl->bindRenderbuffers(unit);
 }
 
 } // namespace mbgl
