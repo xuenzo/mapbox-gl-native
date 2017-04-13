@@ -37,6 +37,13 @@ enum class ViewportMode : EnumType {
     FlippedY,
 };
 
+// Use shortest path when converting from geographical coordinates into screen
+// coordinates by default, or ignore it otherwise.
+enum class ShortestPathMode: EnumType {
+    Use = 0,
+    Ignore,
+};
+
 enum class MapDebugOptions : EnumType {
     NoDebug     = 0,
     TileBorders = 1 << 1,

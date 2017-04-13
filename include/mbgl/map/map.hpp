@@ -153,7 +153,7 @@ public:
     double getMetersPerPixelAtLatitude(double lat, double zoom) const;
     ProjectedMeters projectedMetersForLatLng(const LatLng&) const;
     LatLng latLngForProjectedMeters(const ProjectedMeters&) const;
-    ScreenCoordinate pixelForLatLng(const LatLng&) const;
+    ScreenCoordinate pixelForLatLng(const LatLng&, ShortestPathMode mode = ShortestPathMode::Use) const;
     LatLng latLngForPixel(const ScreenCoordinate&) const;
 
     // Annotations
